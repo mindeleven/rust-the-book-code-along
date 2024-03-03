@@ -4,8 +4,13 @@
 /// Source code and comments are based on The Book
 
 use std::io;
+use rand::Rng;
 
 fn main() {
+    let secret_number = rand::thread_rng().get_range(1..=100);
+    
+    println("The secret number is {}", secret_number);
+    
     println!("It's a guessing game!");
 
     println!("Please enter a number:");
