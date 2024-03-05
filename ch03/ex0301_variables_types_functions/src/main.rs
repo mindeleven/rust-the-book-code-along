@@ -42,5 +42,21 @@ fn main() {
     println!("------------------------------------------------------------");
     println!("Data Types");
     println!("------------------------------------------------------------");
+    // scalar data types
+    // integer types 
+    let x = 10;
+    let y: u64 = 5428;
+    println!("x: {}, y: {}", x, y);
+    // floating point number types 
+    
+    // boolean types 
+    
+    // character types 
+    
+    // compound data types 
+    // tuples
+    
+    // arrays
+    
 
 }
