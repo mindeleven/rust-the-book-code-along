@@ -42,18 +42,25 @@ fn main() {
     println!("------------------------------------------------------------");
     println!("Data Types");
     println!("------------------------------------------------------------");
-    // scalar data types
+    // (1) scalar data types
     // integer types 
+    // no annotation, compiler infers signed integer
     let x = 10;
+    // declaring an integer variable with type annotation
     let y: u64 = 5428;
     println!("x: {}, y: {}", x, y);
     // floating point number types 
-    
+    // two primitive types for floating-point numbers -> numbers with decimal points
+    // default type is f64
+    let z = 2.0; // compiler infers f64
+    // f32 floating-point number with annotation
+    let a: f32 = 3.0;
+    println!("z: {}, a: {}", z, a);
     // boolean types 
     
     // character types 
     
-    // compound data types 
+    // (2) compound data types 
     // tuples
     
     // arrays
