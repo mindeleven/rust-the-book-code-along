@@ -77,9 +77,30 @@ fn main() {
     let ninja = '🥷';
     println!("{} {} {}", c, z, ninja);
     // (2) compound data types 
-    // tuples
-    
-    // arrays
-    
+    // dompound data types group multiple values into one type
+    // (2.1) tuples
+    // values with a variety of types
+    let tup: (i32, u64, String, bool) = (3, 257, "foo".to_string(), false);
+    println!("{:?}", tup);
+    // accessing element wit dot notation
+    let foo = tup.2;
+    println!("{}", foo);
+    // (2.2) arrays
+    // every element of an array must have the same type
+    let arr = [1, 2, 3, 4, 5, 6];
+    println!("{:?}", arr);
+    // array with type annotation using square brackets 
+    // with the type of each element, a semicolon, the number of elements
+    let ary: [i32; 5] = [1, 2, 3, 4, 5];
+    println!("{:?}", ary);
+    // initializing an array that contains the same value for each element
+    let ayr = [3; 5];
+    println!("{:?}", ayr);
+    // accessing array elements by indexing
+    // trying to access an invalid value will result in a runtime error 
+    let elem_a = arr[0];
+    let elem_b = ary[1];
+    let elem_c = ayr[2];
+    println!("{} {} {}", elem_a, elem_b, elem_c);
 
 }
