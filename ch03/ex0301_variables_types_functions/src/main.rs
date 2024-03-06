@@ -103,4 +103,39 @@ fn main() {
     let elem_c = ayr[2];
     println!("{} {} {}", elem_a, elem_b, elem_c);
 
+    println!("------------------------------------------------------------");
+    println!("Functions");
+    println!("------------------------------------------------------------");
+    // calling another function
+    just_another_function(6, 'h');
+    // interlude: statements and expressions
+    // statements -> instructions that perform some action and do not return a value
+    // expressions -> evaluate to a resultant value
+    let _state_of_y = 6; // just a statement, nothing gets evaluated
+    // expressions on the other hand evaluate to a value 
+    // a math operation like 5 + 6 is an expression (it evaluates to the value 11)
+    // calling a function is an expression
+    // calling a macro is an expression
+    // a new scope block created with curly brackets is an expression
+    let state_of_z = {
+        let x = 665;
+        x + 1
+    };
+    println!("the state of z is {}", state_of_z);
+    // 
+    let forty_two = just_another_function(6, 'h');
+    println!("{}", forty_two);
+
+
+}
+
+/// the fn keyword allows you to declare new functions
+/// parameters are special variables that are part of a function’s signature
+/// the type of each parameter must be declared in the signature
+/// the type of return values must be declared after an arrow
+fn just_another_function(value: i32, unit_label: char) -> i32 {
+    println!("I'm just snother function for learning purposes.");
+    println!("Argument given when calling me: {}{}", value, unit_label);
+    // still I feel like returning something else
+    42
 }
