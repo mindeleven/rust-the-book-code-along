@@ -56,10 +56,26 @@ fn main() {
     // f32 floating-point number with annotation
     let a: f32 = 3.0;
     println!("z: {}, a: {}", z, a);
+    // numeric Operations
+    let sum = 51 + 32; // addition
+    let difference = 92.8 - 12.3; // subtraction
+    let product = 13 * 13; // multiplication
+    let quotient = 22.7 / 4.9; // division
+    let truncated = -5 / 3; // results in -1
+    let remainder = 43 % 5; // remainder, modulo
+    println!("{} {} {} {} {} {}", sum, difference, product, quotient, truncated, remainder);
     // boolean types 
-    
+    // a boolean type has two possible values -> true and false
+    let t = true;
+    let f: bool = false; // boolean with annotation
+    println!("{} is not {}", t, f);
     // character types 
-    
+    // the char type is Rust’s most primitive alphabetic type
+    // char literals are specified with single quotes
+    let c = 'z';
+    let z: char = 'Z'; // character type with annotation
+    let ninja = '🥷';
+    println!("{} {} {}", c, z, ninja);
     // (2) compound data types 
     // tuples
     
