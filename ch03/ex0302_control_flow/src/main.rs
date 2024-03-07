@@ -112,4 +112,27 @@ fn main() {
     }
     println!("afthermath of first while loop (we're at {})", while_number);
 
+    println!("------------------------------------------------------------");
+    println!("Looping Through a Collection with for");
+    println!("------------------------------------------------------------");
+    // it's possible to use a while construct to loop over the elements of a collection
+    let a = [10, 20, 30, 40, 50];
+    let mut index = 0;
+    while index < a.len() {
+        println!("the value is: {}", a[index]);
+
+        index += 1;
+    }
+    // a more concise alternative for executing some code for each item in a collection
+    // is a for loop looks
+    // safety and conciseness makes them the most commonly used loop construct in Rust
+    let b = [10, 20, 30, 40, 50];
+    for elem in b {
+        println!("Once again from a for loop: the value is: {}", elem);
+    }
+    // countdown in a for loop with rev to reverse the range
+    for number in (666..671).rev() {
+        println!("number with rev(): {}", number);
+    }
+
 }
