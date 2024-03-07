@@ -96,5 +96,20 @@ fn main() {
         counter += 1;
     }
     
+    println!("------------------------------------------------------------");
+    println!("Conditional Loops with while");
+    println!("------------------------------------------------------------");
+    // evaluating a condition within a loop
+    // while the condition is true the loop runs
+    // when the condition ceases to be true the program calls break
+    let mut while_number = 3;
+    while while_number > 0 {
+        println!("the number from the first while loop is {}", while_number);
+        if while_number == 0 {
+            break;
+        }
+        while_number -= 1;
+    }
+    println!("afthermath of first while loop (we're at {})", while_number);
 
 }
