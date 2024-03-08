@@ -56,4 +56,29 @@ fn main() {
         println!("s1: {}, s2: {}", s1, s2)
     }
 
+    println!("------------------------------------------------------------");
+    println!("Ownership and Functions");
+    println!("------------------------------------------------------------");
+    let another_string = String::from("handing over ownership");
+    takes_ownership(another_string); // another_string moves into the function
+    let q = 42;
+    makes_copy(q); // i32 is Copy so no move
+    let q2 = String::from("give it back!");
+    let q3 = takes_and_gives_back(q2);
+    println!("{}", q3);
+
 }
+
+fn takes_ownership(some_string: String) { // some_string comes into scope
+    println!("this string is mine now: {}", some_string)
+} // some_string goes out of scope and `drop` is called
+
+fn takes_and_gives_back(some_string: String) -> String {
+    println!("this string is mine now: {}", some_string);
+    println!("but I'll give it back");
+    some_string
+}
+
+fn makes_copy(some_integer: i32) { // some_integer comes into scope
+    println!("I got just a copy of {}, nothing to see here", some_integer)
+} // some_integer goes out of scope, nothing special happens
