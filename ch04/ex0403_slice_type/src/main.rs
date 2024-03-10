@@ -35,7 +35,10 @@ fn main() {
 
 // function for a second attempt using slices
 // return type that signifies string slice is written as &str
-fn find_first_slice(s: &String) -> &str {
+//fn find_first_slice(s: &String) -> &str {
+// modifying the signature of the function a bit
+// &str allows for &str and &String values
+fn find_first_slice(s: &str) -> &str {
     // same procedure as with first attempt below
     // to get the index for the end of the word
     let bytes = s.as_bytes();
