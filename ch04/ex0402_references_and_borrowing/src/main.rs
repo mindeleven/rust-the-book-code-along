@@ -35,7 +35,9 @@ fn main() {
     // a dangling pointer is a pointer that references a location in memory 
     // that may have been given to someone else by freeing some memory
     // while preserving a pointer to that memory
-    let _to_prove_the_point = dangle();
+    //let _to_prove_the_point = dangle();
+    let to_prove_the_point_once_again = no_dangle();
+    println!("{}", to_prove_the_point_once_again);
 
 }
 
@@ -49,8 +51,19 @@ fn modify_string(s: &mut String) {
     s.push_str(" sometimes has some clouds");
 }
 
+/* // the following function won't work
 fn dangle() -> &String { // compiler: expected named lifetime parameter
     let s = String::from("dangellagelong");
+    
+    // s is created inside dangle
+    // when the code of dangle is finished s will be deallocated
+    // a reference to it would be pointing to an invalid String
 
     &s // compiler: returns a reference to data owned by the current function
+}
+*/
+// to save the day we don't dangle and return the string directly
+fn no_dangle() -> String { 
+    let s = String::from("nooooooooooo ööööö dangellagelong");
+    s
 }
