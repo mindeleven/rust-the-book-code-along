@@ -29,6 +29,14 @@ fn main() {
     modify_string(&mut s1);
     println!("{}", s1);
 
+    println!("------------------------------------------------------------");
+    println!("Dangling References");
+    println!("------------------------------------------------------------");
+    // a dangling pointer is a pointer that references a location in memory 
+    // that may have been given to someone else by freeing some memory
+    // while preserving a pointer to that memory
+    let _to_prove_the_point = dangle();
+
 }
 
 // function that has a reference to an object as a parameter 
@@ -39,4 +47,10 @@ fn calculate_length(s: &String) -> usize {
 
 fn modify_string(s: &mut String) {
     s.push_str(" sometimes has some clouds");
+}
+
+fn dangle() -> &String { // compiler: expected named lifetime parameter
+    let s = String::from("dangellagelong");
+
+    &s // compiler: returns a reference to data owned by the current function
 }
