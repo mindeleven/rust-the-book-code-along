@@ -10,6 +10,22 @@ struct User {
     sign_in_count: u64,
 }
 
+/// Tuple structs
+/// tuple structs are structs that look similar to tuples
+/// tuple structs have the added meaning of struct name provides
+/// but don’t have names associated with their fields
+/// defining a tuple struct by with the struct keyword and the struct name 
+/// followed by the types in parentheses
+#[allow(dead_code)]
+struct Color(i32, i32, i32);
+#[allow(dead_code)]
+struct Point(i32, i32, i32);
+
+/// Unit-like Structs
+/// defining structs that don’t have any fields
+/// they behave similarly to (), the unit type in tuples
+/// useful when defining traits
+struct AlwaysEqual;
 
 fn main() {
     println!("------------------------------------------------------------");
@@ -63,6 +79,17 @@ fn main() {
         ..user_y
     };
     println!("{:?}", user_y1);
+
+    println!("------------------------------------------------------------");
+    println!("Tuple structs");
+    println!("------------------------------------------------------------");
+    let _black = Color(0, 0, 0);
+    let _origin = Point(0, 0, 0);
+
+    println!("------------------------------------------------------------");
+    println!("Unit-like Structs");
+    println!("------------------------------------------------------------");
+    let _subject = AlwaysEqual;
 
 }
 
