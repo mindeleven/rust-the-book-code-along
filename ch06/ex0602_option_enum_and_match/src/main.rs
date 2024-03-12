@@ -110,6 +110,23 @@ fn main() {
         _ => (),
     }
 
+    println!("------------------------------------------------------------");
+    println!("Concise Control Flow with if let");
+    println!("------------------------------------------------------------");
+    let config_max = Some(3u8);
+    // executing code on the some variant with match
+    match config_max {
+        Some(max) => println!("The maximum is configured to be {}", max),
+        _ => (),
+    }
+    // writing it in a shorter way using if let
+    // works the same way as a match 
+    // where the expression is given to the match and the pattern is its first arm
+    // the pattern is Some(max) and the max binds to the value inside the Some
+    if let Some(max) = config_max {
+        println!("The maximum is configured to be {}", max);
+    }
+    
 }
 
 // function that takes an unknown US coin and returns its value in cents
