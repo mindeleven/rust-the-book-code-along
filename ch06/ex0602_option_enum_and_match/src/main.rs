@@ -24,7 +24,16 @@ enum Coin {
     Penny,
     Nickel,
     Dime,
-    Quarter,
+    Quarter(UsState),
+}
+
+#[derive(Debug)]
+#[allow(dead_code)]
+enum UsState {
+    Alabama,
+    Alaska,
+    Arizona,
+    Arkansas,
 }
 
 fn main() {
@@ -53,6 +62,13 @@ fn main() {
     let my_coin = Coin::Penny;
     println!("My coin has the value {}", value_in_cents(my_coin));
 
+    println!("------------------------------------------------------------");
+    println!("Patterns That Bind to Values");
+    println!("------------------------------------------------------------");
+    // match arms can bind to the parts of the values that match the pattern
+    let my_quarter = Coin::Quarter(UsState::Alaska);
+    println!("My querter has the value {}", value_in_cents(my_quarter));
+
 }
 
 // function that takes an unknown US coin and returns its value in cents
@@ -67,6 +83,11 @@ fn value_in_cents(coin: Coin) -> u8 {
         },
         Coin::Nickel => 5,
         Coin::Dime => 20,
-        Coin::Quarter => 25,
+        Coin::Quarter(state) => {
+            // we can extract the binding for the value state here
+            // and use it in a println expression
+            println!("State quarter from {:?}!", state);
+            25
+        },
     }
 }
