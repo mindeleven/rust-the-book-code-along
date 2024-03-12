@@ -69,6 +69,16 @@ fn main() {
     let my_quarter = Coin::Quarter(UsState::Alaska);
     println!("My querter has the value {}", value_in_cents(my_quarter));
 
+    println!("------------------------------------------------------------");
+    println!("Matching with Option<T>");
+    println!("------------------------------------------------------------");
+    let five = Some(5);
+    let six = match_and_add_one(five);
+    let none: Option<i32> = match_and_add_one(None);
+    println!("{:?}", six);
+    println!("{:?}", none);
+
+
 }
 
 // function that takes an unknown US coin and returns its value in cents
@@ -89,5 +99,14 @@ fn value_in_cents(coin: Coin) -> u8 {
             println!("State quarter from {:?}!", state);
             25
         },
+    }
+}
+
+// function to match an option of type i32
+fn match_and_add_one(x: Option<i32>) -> Option<i32> {
+    match x {
+        // matches are exhaustive so some and none need to be handled
+        None => None,
+        Some(x) => Some(x + 1),
     }
 }
