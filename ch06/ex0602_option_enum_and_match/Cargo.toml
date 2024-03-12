@@ -1,0 +1,6 @@
+[package]
+name = "ex0602_option_enum_and_match"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
