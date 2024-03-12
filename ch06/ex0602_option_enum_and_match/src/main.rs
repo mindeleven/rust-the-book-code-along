@@ -78,6 +78,37 @@ fn main() {
     println!("{:?}", six);
     println!("{:?}", none);
 
+    println!("------------------------------------------------------------");
+    println!("Catch-all Patterns and the _ Placeholder");
+    println!("------------------------------------------------------------");
+    // using enums match can also take special actions for a few particular values
+    // but for all other values take one default action
+    let dice_roll = 9;
+    match dice_roll {
+        3 => add_fancy_hat(),
+        7 => remove_fancy_hat(),
+        // last arm that covers every other possible value
+        // name of the variable "other" is arbitray (is this right?)
+        // the last pattern will match all values not specifically listed
+        // in this case we use the value that has been passed
+        other => move_player(other),
+    }
+    
+    // catch-all pattern we can use when we want a catch-all 
+    // but don’t want to use the value in the catch-all pattern: _
+    match dice_roll {
+        3 => add_fancy_hat(),
+        7 => remove_fancy_hat(),
+        // catch-all pattern
+        _ => reroll(),
+    }
+
+    // if we don't want to happe anything in the catch all arm we can return the unit value
+    match dice_roll {
+        3 => add_fancy_hat(),
+        7 => remove_fancy_hat(),
+        _ => (),
+    }
 
 }
 
@@ -110,3 +141,9 @@ fn match_and_add_one(x: Option<i32>) -> Option<i32> {
         Some(x) => Some(x + 1),
     }
 }
+
+// functions for the catch all example
+fn add_fancy_hat() {}
+fn remove_fancy_hat() {}
+fn move_player(_num_spaces: u8) {}
+fn reroll() {}
