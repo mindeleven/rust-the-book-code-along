@@ -7,13 +7,28 @@
 /// creating a shortcut to a path with the use keyword
 /// bringing the crate::front_of_house::hosting module into scope
 /// use only creates the shortcut for the particular scope in which the use occurs
-use crate::front_of_house::hosting;
+/* use crate::front_of_house::hosting; */
+/// combining pub and use (is called re-exporting)
+/// we’re bringing an item into scope 
+/// but also making that item available for others to bring into their scope
+pub use crate::front_of_house::hosting;
+/// external code can now use the path ex0701_packages_crates_modules::hosting::add_to_waitlist()
 
 /// if we want to bring two types of the same name into the same scope with use
 /// we can specify as and a new local name, or alias, for the type
 /* example:
 use std::fmt::Result;
 use std::io::Result as IoResult;
+*/
+
+/// The Glob Operator
+/// bringing all public items defined in a path into scope can be done with the * glob operator
+/* use std::collections::*;
+ */
+
+/// using nested paths to clean up large use lists
+/* example
+use std::{cmp::Ordering, io};
 */
 
 /// front of house module section
