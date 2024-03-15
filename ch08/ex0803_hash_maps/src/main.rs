@@ -34,4 +34,16 @@ fn main() {
         println!("the score of player \"{}\" is {} points", k, v);
     }
 
+    // Hash Maps and Ownership
+    // types that implement the Copy trait are copied into the hash map
+    // owned values like String will be moved and the hash map will become the owner
+    // example: hash map takes ownership of String values
+    let field_name = String::from("Favorite color");
+    let field_value = String::from("Blue");
+    let mut map = HashMap::new();
+    map.insert(field_name, field_value); // field_name and field_value are invalid at this point
+    println!("{:?}", map);
+
+
+
 }
