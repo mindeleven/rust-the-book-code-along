@@ -61,4 +61,41 @@ fn main() {
     // and try to add an element to the end
     // this program won’t work if we also try to refer to that element later in the function
 
+    // Iterating over the Values in a Vector
+    let v2 = vec![23, 45, 56, 77, 83, 91, 100, 101, 153];
+    // iterating through all the elements to access each element in a vector in turn
+    for elem in &v2 {
+        println!("{}", elem);
+    }
+
+    // iterating over mutable references in a mutable vector 
+    // and making changes to all the elements
+    let mut v3 = vec![233, 435, 356, 772, 833, 911, 110, 161, 153];
+    for elem in &mut v3 {
+        // change the value that the mutable reference refers to
+        // the value in elem needs to be dereferenced with the * dereference operator
+        *elem = *elem*2;
+    }
+    println!("v3 afterwards: {:?}", v3);
+
+    // Using an Enum to Store Multiple Types
+    // workaround for storing a list of items of different types
+    // when one type is neede that represents elements of different types an enum can be used
+    #[allow(dead_code)]
+    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+    // now defining a row of the spreadsheet
+    let _row = vec![
+        SpreadsheetCell::Int(3),
+        SpreadsheetCell::Float(6.89),
+        SpreadsheetCell::Text(String::from("some string"))
+    ];
+    
+    // Dropping a Vector Drops Its Elements
+    {
+        let _v8 = vec![233, 435, 356];
+    } // v8 goes out of scope and is freed here
 }
