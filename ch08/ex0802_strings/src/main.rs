@@ -67,5 +67,29 @@ fn main() {
     let s3 = String::from("toe");
     let s = format!("{s1}-{s2}-{s3}");
     println!("{}", s);
-   
+
+    // Indexing into Strings
+    // if you try to access parts of a String using indexing syntax in Rust you’ll get an error
+    // if you index into a string it’s not clear what the return type of the 
+    // string-indexing operation should be: 
+    // a byte value, a character, a grapheme cluster, or a string slice
+    // a better way to do it: Slicing Strings
+    // use [] with a range to create a string slice containing particular bytes
+    let hello = "Здравствуйте";
+    let s_of_hello = &hello[0..4];
+    // this works but if we were to try to slice only part of a character’s bytes 
+    // Rust would panic at runtime
+    println!("{}", s_of_hello);
+
+    // Methods for Iterating Over Strings
+    // when iterating, be explicit about whether you want characters or bytes
+    // chars separates out and returns two values of type char
+    // and you can iterate over the result to access each element
+    for c in "Здравствуйте".chars() {
+        println!("{}", c);
+    }
+    // the bytes method returns each raw byte
+    for b in "Здравствуйте".bytes() {
+        println!("{}", b);
+    }
 }
