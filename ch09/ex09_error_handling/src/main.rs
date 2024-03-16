@@ -84,4 +84,14 @@ fn main() {
         }
     });
     
+    // Shortcuts for Panic on Error: unwrap and expect
+    // the unwrap method is a shortcut method implemented just like the match expression
+    // if the Result value is the Ok variant unwrap will return the value inside the Ok
+    // if the Result is the Err variant unwrap will call the panic! macro
+    let _greeting_file3 = File::open("hello2.txt").unwrap();
+    // using expect instead of unwrap let's us provide a good error message
+    let _greeting_file4 = File::open("hello3.txt")
+        .expect("Couldn't find hello3.txt in this project!");
+
+    
 }
