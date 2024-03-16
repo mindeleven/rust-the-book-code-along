@@ -4,7 +4,7 @@
 /// Rust has the type Result<T, E> for recoverable errors 
 /// and the panic! macro to stop execution in case of an unrecoverable error
 use std::{
-    fs::File,
+    fs::{self, File},
     io::{self, ErrorKind, Read}
 };
 
@@ -117,6 +117,12 @@ fn main() {
     };
     println!("(3) Hello, {}!", username2);
     
+    let username3 = match read_username_from_file_short3() {
+        Ok(username) => username,
+        Err(e) => panic!("Problem retrieving the username: {:?}", e),
+    };
+    println!("(4) Hello, {}!", username3);
+    
 }
 
 // A Shortcut for Propagating Errors: the ? Operator
@@ -140,6 +146,10 @@ fn read_username_from_file_short2() -> Result<String, io::Error> {
     Ok(username)
 }
 
+// the standard library offers an even shorter way for such a common task
+fn read_username_from_file_short3() -> Result<String, io::Error> {
+    fs::read_to_string("hello.txt")
+}
 
 // Propagating Errors
 // function is returning a value of the type Result<T, E>
