@@ -3,8 +3,10 @@
 /// (2) unrecoverable errors are always symptoms of bugs that make it necessary stop the program
 /// Rust has the type Result<T, E> for recoverable errors 
 /// and the panic! macro to stop execution in case of an unrecoverable error
-use std::fs::File;
-use std::io::ErrorKind;
+use std::{
+    fs::File,
+    io::{self, ErrorKind, Read}
+};
 
 fn main() {
     // a simple call to panic
@@ -90,8 +92,45 @@ fn main() {
     // if the Result is the Err variant unwrap will call the panic! macro
     let _greeting_file3 = File::open("hello2.txt").unwrap();
     // using expect instead of unwrap let's us provide a good error message
-    let _greeting_file4 = File::open("hello3.txt")
+    let _greeting_file4 = File::open("hello2.txt")
         .expect("Couldn't find hello3.txt in this project!");
-
     
+    // Propagating Errors
+    // propagating the error -> instead of handling the error within the function itself
+    // the error is returned to the calling code
+    let username = match read_username_from_file() {
+        Ok(username) => username,
+        Err(e) => panic!("Problem retrieving the username: {:?}", e),
+    };
+
+    println!("Hello, {}!", username);
+
+}
+
+// Propagating Errors
+// function is returning a value of the type Result<T, E>
+// parameter T has been filled in with the concrete type String
+// generic type E has been filled in with the concrete type io::Error
+// if function succeeds it returns an Ok value that holds the username as a String
+// if function encounters problems the calling code will receive an Err value
+fn read_username_from_file() -> Result<String, io::Error> {
+    let username = File::open("hello.txt");
+    // if File::open succeeds the file handle becomes the value in the mutable 
+    // variable username_file and the function continues
+    let mut username_file = match username {
+        Ok(file_handle) => file_handle,
+        // in the Err case we return early with the return keyword
+        // the error value from File::open is passed back to the calling code
+        Err(error) => return Err(error),
+    };
+
+    let mut username = String::new();
+    
+    // read_to_string method might fail so it returns another Result
+    // if read_to_string succeeds the function returns the username wrapped in an Ok
+    match username_file.read_to_string(&mut username) {
+        Ok(_) => Ok(username),
+        // if read_to_string fails we return the error value like above
+        Err(e) => Err(e),
+    }
 }
