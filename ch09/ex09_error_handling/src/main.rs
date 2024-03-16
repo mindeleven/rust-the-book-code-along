@@ -102,10 +102,44 @@ fn main() {
         Ok(username) => username,
         Err(e) => panic!("Problem retrieving the username: {:?}", e),
     };
+    println!("(1) Hello, {}!", username);
 
-    println!("Hello, {}!", username);
+    // A Shortcut for Propagating Errors: the ? Operator
+    let username1 = match read_username_from_file_short1() {
+        Ok(username) => username,
+        Err(e) => panic!("Problem retrieving the username: {:?}", e),
+    };
+    println!("(2) Hello, {}!", username1);
 
+    let username2 = match read_username_from_file_short2() {
+        Ok(username) => username,
+        Err(e) => panic!("Problem retrieving the username: {:?}", e),
+    };
+    println!("(3) Hello, {}!", username2);
+    
 }
+
+// A Shortcut for Propagating Errors: the ? Operator
+fn read_username_from_file_short1() -> Result<String, io::Error> {
+    // the ? placed after a Result value is defined to work in almost the same way as a match expression
+    // if Ok, the value inside the Ok will get returned from this expression (program will continue)
+    // if Err, the Err will be returned from the whole function (function will return early)
+    // with the ? operator the error type received 
+    // is converted into the error type defined in the return type of the current function
+    let mut username_file = File::open("hello.txt")?;
+    let mut username = String::new();
+    username_file.read_to_string(&mut username)?;
+    Ok(username)
+}
+
+// an even shorter shortcut
+fn read_username_from_file_short2() -> Result<String, io::Error> {
+    let mut username = String::new();
+    // chaining method calls immediately after the ?
+    File::open("hello.txt")?.read_to_string(&mut username)?;
+    Ok(username)
+}
+
 
 // Propagating Errors
 // function is returning a value of the type Result<T, E>
