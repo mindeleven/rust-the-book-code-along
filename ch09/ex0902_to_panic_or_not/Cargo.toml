@@ -1,0 +1,6 @@
+[package]
+name = "ex0902_to_panic_or_not"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
