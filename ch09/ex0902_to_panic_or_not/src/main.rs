@@ -13,7 +13,12 @@ fn main() {
     // Creating Custom Types for Validation
     // let's go back to the code of the guessing game from chapter two
 
-    let secret_number: u32 = rand::thread_rng().gen_range(1..=100);
+    // so far the user’s guesses don't get validated
+    // it would be a useful enhancement to guide the user toward valid guesses 
+    // and have different behavior when a user guesses a number that’s out of range 
+    // versus when a user types, for example, letters instead
+
+    let secret_number: i32 = rand::thread_rng().gen_range(1..=100);
 
     println!("It's a guessing game!");
     loop {
@@ -24,11 +29,17 @@ fn main() {
         io::stdin()
             .read_line(&mut guess)
             .expect("Something went wrong");
-
-        let guess: u32 = match guess.trim().parse() {
+        
+        // parsing the guess as an i32 instead of only a u32 
+        let guess: i32 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
+        // then add a check for the number being in range
+        if guess < 1 || guess > 100 {
+            println!("The secret number will be between 1 and 100.");
+            continue;
+        }
 
         println!("Your input is: {}", guess);
 
