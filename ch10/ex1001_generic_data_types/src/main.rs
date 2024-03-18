@@ -26,6 +26,11 @@ fn find_largest_char(list: &[char]) -> &char {
     largest
 }
 
+/// defining a generic largest function
+fn _find_largest<T>(_list: &[T]) -> &T {
+    unimplemented!()
+}
+
 fn main() {
     let number_list = vec![23, 76, 33, 44, 96, 15, 28];
     let largest_number = find_largest_i32(&number_list);
