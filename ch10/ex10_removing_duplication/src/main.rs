@@ -18,6 +18,7 @@ fn main() {
 
 }
 
+// parameter list represents any concrete slice of i32 values
 fn find_largest(list: &[i32]) -> &i32 {
     let mut largest_number = &list[0];
 
