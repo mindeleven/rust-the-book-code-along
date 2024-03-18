@@ -34,10 +34,29 @@ fn find_largest<T: PartialOrd>(list: &[T]) -> &T {
 /// Generic Types in Struct Definitions
 /// defining a struct to use a generic type parameter using the <> syntax
 /// in this example both fields have to be of the same type
-struct _Point<T> {
+#[derive(Debug)]
+struct Point1<T> {
     x: T,
     y: T
 }
+/// implementing methods on structs with generic types in their definitions
+impl<T> Point1<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+    fn y(&self) -> &T {
+        &self.y
+    }
+}
+/// specifying constraints on generic types when defining methods on the type
+/// instances of Point<T> where T is not of type f32 will not have this method defined
+/// the method uses mathematical operations that are available only for floating point types
+impl Point1<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+}
+
 /// defining a struct with different types as generics
 #[derive(Debug)]
 #[allow(dead_code)]
@@ -75,9 +94,14 @@ fn main() {
     let largest_char = find_largest(&char_list);
     println!("The largest char in the char list is {}.", largest_char);
 
+    // initiating a struct with only one generic parameters
+    let point = Point1 { x: 9, y: 4 }; // both integer
+    println!("x in point is {} and y in point is {}", point.x(), point.y());
+    let point_f = Point1 { x: 9.4, y: 4.5 }; // both integer
+    println!("the point_f's distance from origin is {}", point_f.distance_from_origin());
     // initiating a struct with different types as generic parameters
     let point1 = Point { x: 9, y: 4 }; // both integer
     let point2 = Point { x: 9.3, y: 4.1 }; // both float
     let point3 = Point { x: 9, y: 4.1 }; // integer and float
-    println!("{:?}, {:?}, {:?}", point1, point2, point3);
+    println!("{:?}, {:?}, {:?}, {:?}", point, point1, point2, point3);
 }
