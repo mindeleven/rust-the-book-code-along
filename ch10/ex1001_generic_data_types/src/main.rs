@@ -31,6 +31,21 @@ fn find_largest<T: PartialOrd>(list: &[T]) -> &T {
     largest
 }
 
+/// Generic Types in Struct Definitions
+/// defining a struct to use a generic type parameter using the <> syntax
+/// in this example both fields have to be of the same type
+struct _Point<T> {
+    x: T,
+    y: T
+}
+/// defining a struct with different types as generics
+#[derive(Debug)]
+#[allow(dead_code)]
+struct Point<T, U> {
+    x: T,
+    y: U
+}
+
 fn main() {
     let number_list = vec![23, 76, 33, 44, 96, 15, 28];
     let largest_number = find_largest(&number_list);
@@ -39,4 +54,10 @@ fn main() {
     let char_list = vec!['c', 'h', 'l', 'q', 'p', 'y', 'r'];
     let largest_char = find_largest(&char_list);
     println!("The largest char in the char list is {}.", largest_char);
+
+    // initiating a struct with different types as generic parameters
+    let point1 = Point { x: 9, y: 4 }; // both integer
+    let point2 = Point { x: 9.3, y: 4.1 }; // both float
+    let point3 = Point { x: 9, y: 4.1 }; // integer and float
+    println!("{:?}, {:?}, {:?}", point1, point2, point3);
 }
