@@ -46,6 +46,26 @@ struct Point<T, U> {
     y: U
 }
 
+/// Generic Types in Enum Definitions
+/// we can define enums to hold generic data types in their variants
+/// an example for this is the Option<T> enum comes with the standard library
+/// the Option<T> enum is generic over type T and has two variants
+/// Some which holds one value of type T
+/// and a None that doesn’t hold any value
+/// we can use this abstraction no matter what the type of the optional value is
+/* enum Option<T> {
+    Some(T),
+    None,
+} */
+/// an example for Enums with multiple generic types is the Result<T, E> enum
+/// the Result enum is generic over two types, T and E, and has two variants: 
+/// Ok, which holds a value of type T
+/// and Err which holds a value of type E
+/* enum Result<T, E> {
+    Ok(T),
+    Err(E),
+} */
+
 fn main() {
     let number_list = vec![23, 76, 33, 44, 96, 15, 28];
     let largest_number = find_largest(&number_list);
