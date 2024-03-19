@@ -65,6 +65,25 @@ struct Point<T, U> {
     y: U
 }
 
+/// generic type parameters in a struct definition 
+/// and the generic type parameters that same struct’s method signatures can be different 
+/// the following example uses the generic types X1 and Y1 for the Point99 struct 
+/// and X2 Y2 for the Point99's mixup method signature 
+struct Point99<X1, Y1> {
+    x: X1,
+    y: Y1,
+}
+impl<X1, Y1> Point99<X1, Y1> {
+    /// method creates a new Point99 instance with the x value from the 
+    /// self Point99 (type X1) and the y value from the passed-in Point99 (type Y2)
+    fn mixup<X2, Y2>(self, other: Point99<X2, Y2>) -> Point99<X1, Y2> {
+        Point99 {
+            x: self.x, // x value from the self Point99 (type X1)
+            y: other.y, // y value from the passed-in Point99 (type Y2)
+        }
+    }
+}
+
 /// Generic Types in Enum Definitions
 /// we can define enums to hold generic data types in their variants
 /// an example for this is the Option<T> enum comes with the standard library
@@ -104,4 +123,14 @@ fn main() {
     let point2 = Point { x: 9.3, y: 4.1 }; // both float
     let point3 = Point { x: 9, y: 4.1 }; // integer and float
     println!("{:?}, {:?}, {:?}, {:?}", point, point1, point2, point3);
+
+    // example that generic type parameters in a struct definition 
+    // and the generic type parameters that same struct’s method signatures can be different 
+    let p1 = Point99 { x: 5, y: 10.4 };
+    let p2 = Point99 { x: "Hello", y: 'c' };
+
+    let p3 = p1.mixup(p2);
+
+    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+
 }
