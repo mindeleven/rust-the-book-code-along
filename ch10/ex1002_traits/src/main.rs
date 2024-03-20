@@ -3,7 +3,12 @@
 /// traits can be used to define shared behavior in an abstract way
 /// defining a trait
 /// trait definitions are a way to group method signatures together to define a set of behaviors
-use ex1002_traits::aggregator::{Summary, Tweet, NewsArticle};
+use ex1002_traits::aggregator::{
+    Summary, 
+    Tweet, 
+    NewsArticle, 
+    NewsArticleType2
+};
 
 fn main() {
     // instantiating the Tweet struct and calling summarize on it
@@ -16,6 +21,7 @@ fn main() {
         retweet: false,
     };
     println!("1 new tweet: {}", tweet.summarize());
+    println!("summarize tweet with default: {}", tweet.summarize_with_default());
 
     // instantiating the NewsArticle struct and calling summarize on it
     let article1 = NewsArticle {
@@ -27,8 +33,9 @@ fn main() {
         ),
     };
     println!("1 new news article: {}", article1.summarize());
+    println!("summarize article with default: {}", article1.summarize_with_default());
 
-    let article1 = NewsArticle {
+    let article1 = NewsArticleType2 {
         headline: String::from("Bitcoin Technical Analysis: Bearish Signals Amid Market Turbulence Put Traders on High Alert"),
         location: String::from("news.bitcoin.com, Markets and Prices"),
         author: String::from("Kevin Helms"),
@@ -37,6 +44,7 @@ fn main() {
         ),
     };
     println!("1 new news article: {}", article1.summarize());
+    println!("summarize article with default: {}", article1.summarize_with_default());
 
 }
 
