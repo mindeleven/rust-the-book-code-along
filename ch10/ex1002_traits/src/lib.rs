@@ -78,4 +78,30 @@ pub mod aggregator {
 
     }
 
+    // Traits as Parameters
+    // use traits to define a function that accepts many different types
+    // the following function calls the summarize method on its item parameter
+    // this item parameter is of some type that implements the Summary trait
+    // and accepts any type that implements the specified trait
+    pub fn notify(item: &impl Summary) {
+        println!("Breaking news: {}", item.summarize());
+    }
+
+    // the same function with the "trait bound syntax"
+    pub fn notify2<T: Summary>(item: &T) {
+        println!("Breaking news: {}", item.summarize());
+    }
+    
+    // examples with two parameters
+    // impl Trait syntax:
+    // item1 and item2 can have different types that both have to implement Summary
+    pub fn notify3(_item1: &impl Summary, _item2: &impl Summary) {
+        unimplemented!()
+    }
+    
+    // two parameters with trait bound syntax
+    // value passed as an argument for item1 and item2 must be of the same type
+    pub fn notify4<T: Summary>(_item1: &T, _item2: &T) {
+        unimplemented!()
+    }
 }
