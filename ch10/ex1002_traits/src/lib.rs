@@ -104,4 +104,17 @@ pub mod aggregator {
     pub fn notify4<T: Summary>(_item1: &T, _item2: &T) {
         unimplemented!()
     }
+
+    // Specifying Multiple Trait Bounds with the + Syntax
+    //  example: our notify function should use summarize and display formatting on item
+    // the + syntax tells notify that item has to implement both Display and Summary
+    pub fn notify5(item: &(impl Summary + Display)) {
+        unimplemented!()
+    }
+    // same example with trait bounds on generic types
+    // the function body now can call summarize and use {} to format item
+    pub fn notify6<T: Summary + Display>(item: &T) {
+        unimplemented!()
+    }
+
 }
