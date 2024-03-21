@@ -6,6 +6,10 @@
 /// declared as pub so that crates depending on this crate can make use of it too
 
 pub mod aggregator {
+    use std::fmt::{
+        Debug, 
+        Display
+    };
 
     pub trait Summary {
         fn summarize(&self) -> String;
@@ -108,12 +112,28 @@ pub mod aggregator {
     // Specifying Multiple Trait Bounds with the + Syntax
     //  example: our notify function should use summarize and display formatting on item
     // the + syntax tells notify that item has to implement both Display and Summary
-    pub fn notify5(item: &(impl Summary + Display)) {
+    pub fn notify5(_item: &(impl Summary + Display)) {
         unimplemented!()
     }
     // same example with trait bounds on generic types
     // the function body now can call summarize and use {} to format item
-    pub fn notify6<T: Summary + Display>(item: &T) {
+    pub fn notify6<T: Summary + Display>(_item: &T) {
+        unimplemented!()
+    }
+
+    // Clearer trait bounds with where clauses
+    // with too many trait bounds function signature can become hard to read
+    // therefore alternate syntax for specifying trait bounds inside a where clause after
+    // instead of 
+    fn _some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
+        unimplemented!()
+    }
+    // we can use     
+    fn _some_function2<T, U>(t: &T, u: &U) -> i32
+    where
+        T: Display + Clone,
+        U: Clone + Debug,
+    {
         unimplemented!()
     }
 
