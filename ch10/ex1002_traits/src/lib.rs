@@ -125,11 +125,11 @@ pub mod aggregator {
     // with too many trait bounds function signature can become hard to read
     // therefore alternate syntax for specifying trait bounds inside a where clause after
     // instead of 
-    fn _some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
+    fn _some_function<T: Display + Clone, U: Clone + Debug>(_t: &T, _u: &U) -> i32 {
         unimplemented!()
     }
     // we can use     
-    fn _some_function2<T, U>(t: &T, u: &U) -> i32
+    fn _some_function2<T, U>(_t: &T, _u: &U) -> i32
     where
         T: Display + Clone,
         U: Clone + Debug,
