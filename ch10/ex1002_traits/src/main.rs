@@ -9,6 +9,7 @@ use ex1002_traits::aggregator::{
     NewsArticle, 
     NewsArticleType2
 };
+use std::fmt::Display;
 
 fn main() {
     // instantiating the Tweet struct and calling summarize on it
@@ -47,4 +48,39 @@ fn main() {
     println!("summarize article with default: {}", article1.summarize_with_default());
 
 }
+
+/// Using trait bounds to conditionally implement methods
+#[allow(dead_code)]
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+
+/// the trait bound can be used with an impl block that uses generic type parameters
+impl<T> Pair<T> {
+    fn _new(x: T, y: T) -> Self {
+        Self { x, y }
+    }
+}
+/// we can implement methods conditionally for types that implement the specified traits
+/// the type Pair<T> always implements the new function 
+/// in the following impl block Pair<T> only implements the cmp_display method 
+/// if its inner type T implements the PartialOrd trait
+impl<T: Display + PartialOrd> Pair<T> {
+    fn _cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+
+// blanket implementations -> implementations of a trait on any type 
+// that satisfies the trait bounds
+// example: the standard library implements the ToString trait on any type
+// that implements the Display trait
+/* impl<T: Display> ToString for T {
+    unimplemented!()
+} */
 
