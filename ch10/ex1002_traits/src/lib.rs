@@ -137,4 +137,18 @@ pub mod aggregator {
         unimplemented!()
     }
 
+    /// Returning types that implement traits
+    /// using the impl Trait syntax to return a value of some type that implements a trait
+    /// it could be any type the implements this trait
+    fn _returns_summarizable() -> impl Summary {
+        Tweet {
+            username: String::from("A. L. Crego"),
+            content: String::from(
+                "The greatness of gif format is (paradoxically) in its limits.",
+            ),
+            reply: false,
+            retweet: false,
+        }
+    }
+
 }
