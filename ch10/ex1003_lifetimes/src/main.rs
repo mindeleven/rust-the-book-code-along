@@ -23,7 +23,13 @@ fn main() {
 
 /// Generic Lifetimes in Functions
 /// function takes string slices (which are references) rather than strings
-fn longest(x: &str, y: &str) -> &str {
+/// this signature does not compile -> "expected named lifetime parameter"
+/* fn longest(x: &str, y: &str) -> &str { */
+/// the return type needs a generic lifetime parameter on it
+/// because Rust can’t tell whether the reference being returned refers to x or y
+/// signature needs to express the following constraint: 
+/// the returned reference will be valid as long as both the parameters are valid
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str { // lifetime annotation syntax
     if x.len() > y.len() {
         x
     } else {
