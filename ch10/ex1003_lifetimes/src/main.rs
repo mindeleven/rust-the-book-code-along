@@ -19,6 +19,9 @@ fn main() {
 
     let result = longest(string1.as_str(), string2);
     println!("The longest string is {}", result);
+
+    let result = longest1(string1.as_str(), string2);
+    println!("Return value of longest that always returns first string: {}", result);
 }
 
 /// Generic Lifetimes in Functions
@@ -31,10 +34,19 @@ fn main() {
 /// the returned reference will be valid as long as both the parameters are valid
 /// the function definition specifies that all the references in the signature 
 /// must have the same lifetime 'a
+/// when returning a reference from a function, the lifetime parameter 
+/// for the return type needs to match the lifetime parameter for one of the parameters
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str { // lifetime annotation syntax
     if x.len() > y.len() {
         x
     } else {
         y
     }
+}
+
+// Thinking in terms of lifetimes
+// example: changing the implementation of the longest function 
+// to always return the first parameter rather than the longest string slice
+fn longest1<'a>(x: &'a str, _y: & str) -> &'a str { 
+    x
 }
