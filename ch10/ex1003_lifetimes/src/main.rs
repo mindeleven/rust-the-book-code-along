@@ -29,6 +29,8 @@ fn main() {
 /// because Rust can’t tell whether the reference being returned refers to x or y
 /// signature needs to express the following constraint: 
 /// the returned reference will be valid as long as both the parameters are valid
+/// the function definition specifies that all the references in the signature 
+/// must have the same lifetime 'a
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str { // lifetime annotation syntax
     if x.len() > y.len() {
         x
