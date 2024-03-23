@@ -8,6 +8,21 @@ struct ImportantExcerpt<'a> {
     // annotation means an instance of this struct can’t outlive the reference it holds here
     part: &'a str,
 }
+/// Lifetime annotations in method definitions
+/// lifetime parameter declaration after impl and the type name are required
+impl<'a> ImportantExcerpt<'a> {
+    // it's not required to annotate the lifetime of the reference to self 
+    // because of the lifetime elision
+    fn _level(&self) -> i32 {
+        3
+    }
+    // because one of the parameters in the following function is &self
+    // the return type gets the lifetime of &self
+    fn _announce_and_return_part(&self, announcement: &str) -> &str {
+        println!("Attention please: {}", announcement);
+        self.part
+    }
+}
 
 fn main() {
     // Main aim if lifetimes: preventing dangling references
