@@ -1,3 +1,14 @@
+/// Lifetime annotations in struct definitions
+/// if a struct is defined to hold references we need to add a lifetime annotation 
+/// on every reference in the struct’s definition
+#[derive(Debug)]
+#[allow(dead_code)]
+struct ImportantExcerpt<'a> {
+    // field part that holds a string slice which is a reference
+    // annotation means an instance of this struct can’t outlive the reference it holds here
+    part: &'a str,
+}
+
 fn main() {
     // Main aim if lifetimes: preventing dangling references
     // example program with a dangling reference
@@ -22,6 +33,18 @@ fn main() {
 
     let result = longest1(string1.as_str(), string2);
     println!("Return value of longest that always returns first string: {}", result);
+
+    // Lifetime annotations in struct definitions
+    let novel = String::from("It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of Victory Mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him.");
+    let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+    let i = ImportantExcerpt {
+        part: first_sentence
+    };
+    // data in novel exists before the ImportantExcerpt instance is created
+    // novel doesn’t go out of scope until after the ImportantExcerpt goes out of scope
+    // so the reference in the ImportantExcerpt instance is valid
+    println!("{:?}", i);
+
 }
 
 /// Generic Lifetimes in Functions
