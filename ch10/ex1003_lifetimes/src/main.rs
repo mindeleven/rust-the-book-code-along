@@ -60,6 +60,12 @@ fn main() {
     // so the reference in the ImportantExcerpt instance is valid
     println!("{:?}", i);
 
+    // The static lifetime
+    // the 'static lifetime denotes that the affected reference 
+    // can live for the entire duration of the program
+    // the text of this _s is stored directly in the program’s binary
+    let _s: &'static str = "I have a static lifetime.";
+
 }
 
 /// Generic Lifetimes in Functions
