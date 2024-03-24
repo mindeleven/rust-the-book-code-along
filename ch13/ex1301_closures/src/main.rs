@@ -99,4 +99,38 @@ fn main() {
     // removing the optional brackets
     let add_one_v4 = |x|               x + 1  ;
     */
+
+    // Capturing references or moving ownership
+    // (1) borrowing immutably 
+    let list = vec![1, 2, 3];
+    println!("Before defining closure: {:?}", list);
+    // defining closure, binding variable to closure definition
+    let only_borrows = || println!("From closure: {:?}", list);
+    println!("Before calling closure: {:?}", list);
+    // calling the closure by using the variable name and parentheses
+    only_borrows();
+    println!("After calling closure: {:?}", list);
+
+    // (2) borrowing mutably
+    // defining and calling a closure that captures a mutable reference
+    let mut list2 = vec![1, 2, 3];
+    println!("Before defining closure: {:?}", list2);
+    // closure captures a mutable reference
+    let mut borrows_mutably = || list2.push(7);
+    // mutable borrow has happened so no other borrows are allowed
+    // and not call to println! between closure definition and call
+    borrows_mutably();
+    println!("After calling closure: {:?}", list2);
+
+    // (3) taking ownership
+    // forcing the closure to take ownership of the values it uses in the environment
+    // with the move keyword before the parameter list
+    // technique mostly useful when passing a closure to a new thread to move the data
+    let list3 = vec![1, 2, 3];
+    println!("Before defining closure: {:?}", list3);
+    // move keyword before the parameter list:
+    thread::spawn(move || println!("From thread: {:?}", list3))
+        .join()
+        .unwrap();
+
 }
