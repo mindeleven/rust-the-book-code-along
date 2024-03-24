@@ -1,3 +1,11 @@
+/// lifetime elision rules
+/// (1) the compiler assigns a lifetime parameter to each parameter that’s a reference
+/// (2) if there is exactly one input lifetime parameter
+///     that lifetime is assigned to all output lifetime parameters
+/// (3) if there are multiple input lifetime parameters
+///     but one of them is &self the lifetime of self is assigned to all 
+///     output lifetime parameters
+
 /// Lifetime annotations in struct definitions
 /// if a struct is defined to hold references we need to add a lifetime annotation 
 /// on every reference in the struct’s definition
