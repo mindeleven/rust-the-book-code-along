@@ -142,6 +142,21 @@ fn main() {
 
     list.sort_by_key(|r| r.width);
     println!("{:#?}", list);
+    
+    // example for moving captured values out of closures and the Fn traits
+    // described below
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
+    // sort_by_key uses FnMut for the trait bound
+    // closure gets one argument in the form of a reference to the current item
+    // useful when you want to sort a slice by a particular attribute of each item
+    // the closure doesn’t capture, mutate, or move out anything from its environment
+    list.sort_by_key(|r| r.width);
+    println!("{:#?}", list);
+
 }
 
 /// Moving captured values out of closures and the Fn traits
@@ -150,8 +165,22 @@ fn main() {
 /// -> mutate a captured value
 /// -> neither move nor mutate a captured value
 /// -> capture nothing from the environment at all
+/// 
+/// depending on the way a closure captures and handles values from the environment 
+/// it can implement different traits
+/// (1) FnOnce  -> applies to closures that can be called once
+/// all closures implement at least this trait
+/// a closure that moves captured values out of its body will only implement FnOnce
+/// (2) FnMut -> applies to closures that don’t move captured values out of their body
+/// this closures might mutate the captured values
+/// can be called more than once
+/// (3) Fn -> applies to closures that don’t move captured values out of their body 
+/// AND that don’t mutate captured values
+/// as well as closures that capture nothing from their environment
+/// can be called more than once without mutating their environment
 
 #[derive(Debug)]
+#[allow(dead_code)]
 struct Rectangle {
     width: u32,
     height: u32,
