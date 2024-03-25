@@ -133,4 +133,26 @@ fn main() {
         .join()
         .unwrap();
 
+    // Moving captured values out of closures and the Fn traits
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
+
+    list.sort_by_key(|r| r.width);
+    println!("{:#?}", list);
+}
+
+/// Moving captured values out of closures and the Fn traits
+/// a closure body can
+/// -> move a captured value out of the closure
+/// -> mutate a captured value
+/// -> neither move nor mutate a captured value
+/// -> capture nothing from the environment at all
+
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
 }
