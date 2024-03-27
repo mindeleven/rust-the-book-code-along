@@ -102,6 +102,38 @@ mod tests {
         );
     }
 
+    // Checking for panics with should_panic
+    // checking that our code handles error conditions as expected
+    // as an example, back to the Guess type from Chapter 9
+    // writing a test that ensures that attempting to create a Guess instance 
+    // with a value outside that range between 1 and 100 panics
+    #[test]
+    #[should_panic]
+    fn greater_than_100() {
+        Guess::new(200);
+    }
+    // same as above that will fail because it doesn't panic
+    #[test]
+    #[should_panic]
+    fn greater_than_100_err() {
+        Guess::new(100);
+    }
+
+}
+
+// as an example, back to the Guess type from Chapter 9
+pub struct Guess {
+    value: i32,
+}
+
+impl Guess {
+    pub fn new(value: i32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("Guess value must be between 1 and 100, got {}.", value);
+        }
+
+        Guess { value }
+    }
 }
 
 // adding custom failure messages
