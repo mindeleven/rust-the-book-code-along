@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 /// tests are Rust functions 
 /// they verify that the non-test code is functioning in the expected manner
 /// the body of a test functions
@@ -78,8 +79,37 @@ mod tests {
         assert_ne!(add_two(10), 13);
     }
 
+    // Adding custom failure messages
+    // custom message can be added to be printed with the failure message 
+    // as optional arguments to the assert!, assert_eq! and assert_ne!
+    #[test]
+    fn greeting_contains_name() {
+        let result = greeting("Carol");
+        // just assert that the output contains the text of the input parameter
+        assert!(result.contains("Carol"));
+    }
+    // same test with a custom failure message 
+    // composed of a format string with a placeholder 
+    // filled in with the actual value from the greeting function
+    #[test]
+    fn greeting_contains_name_fails() {
+        let result = greeting("Carol");
+        // just assert that the output contains the text of the input parameter
+        assert!(
+            result.contains("Carol"),
+            "Greeting did not contain name, value was `{}`",
+            result
+        );
+    }
+
 }
 
+// adding custom failure messages
+pub fn greeting(name: &str) -> String {
+    format!("Hello {}!", name)
+}
+
+// testing equality with the assert_eq! and assert_ne! macros
 pub fn add_two(a: i32) -> i32 {
     a + 2
 }
