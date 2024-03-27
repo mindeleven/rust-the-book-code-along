@@ -28,7 +28,7 @@ mod tests {
     }
 
     #[test]
-    fn another() {
+    fn another_one_bites_the_dust() {
         panic!("Make this test fail!");
     }
 
@@ -62,5 +62,24 @@ mod tests {
         // we need to negate that result before we pass it to the assert! macro
         assert!(!smaller.can_hold(&larger));
     }
+    
+    // testing equality with the assert_eq! and assert_ne! macros
+    // verifying functionality by testing for equality 
+    // between the result of the code under test and the value you expect the code to return
+    #[test]
+    fn it_adds_two() {
+        assert_eq!(add_two(10), 12);
+    }
 
+    // the assert_ne! macro will pass if the two values we give it are not equal 
+    // and fail if they’re equal
+    #[test]
+    fn it_adds_two_and_fails() {
+        assert_ne!(add_two(10), 13);
+    }
+
+}
+
+pub fn add_two(a: i32) -> i32 {
+    a + 2
 }
