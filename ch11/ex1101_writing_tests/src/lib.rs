@@ -119,6 +119,20 @@ mod tests {
         Guess::new(100);
     }
 
+    // Using Result<T, E> in tests
+    // test that returns an Err instead of panicking:
+    #[test]
+    fn it_works_with_result() -> Result<(), String> {
+        // instead of calling assert_eq!
+        // we return Ok(()) when the test passes 
+        // and an Err with a String inside when the test fails
+        if 2 + 2 == 4 {
+            Ok(())
+        } else {
+            Err(String::from("two plus two does not equal four"))
+        }
+    }
+
 }
 
 // as an example, back to the Guess type from Chapter 9
