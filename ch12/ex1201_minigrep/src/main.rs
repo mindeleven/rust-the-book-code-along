@@ -14,7 +14,9 @@
 /// first task making minigrep accept two command line arguments: 
 /// the file path and a string to search for
 /// cargo run -- searchstring example-filename.txt
-use std::env;
+/// cargo run -- searchstring poem.txt
+/// std::fs is needed to handle files
+use std::{env, fs};
 
 fn main() {
     // reading command line arguments
@@ -31,5 +33,12 @@ fn main() {
     // let's print out what we got
     println!("Searching for {}", query);
     println!("In file {}", file_path);
-    
+
+    // fs::read_to_string takes the file_path
+    // opens that file
+    // and returns a std::io::Result<String> of the file’s contents
+    let contents = fs::read_to_string(file_path)
+        .expect("Couldn't read the file from the path you provided.");
+
+    println!("Text read from file:\n{}", contents);
 }
