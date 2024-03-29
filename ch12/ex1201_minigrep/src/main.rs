@@ -9,7 +9,27 @@
 /// -> (2) it reads the file
 /// -> (3) it finds lines in that file that contain the string argument
 /// -> (4) it prints those lines
+/// 
+/// Accepting command line arguments
+/// first task making minigrep accept two command line arguments: 
+/// the file path and a string to search for
+/// cargo run -- searchstring example-filename.txt
+use std::env;
 
 fn main() {
-    println!("Hello, world!");
+    // reading command line arguments
+    let args: Vec<String> = env::args().collect();
+    dbg!(&args);
+
+    // saving the argument values in variables
+    // first value args[0] contains the program's/binary's name
+    // arguments start at index 1
+    // first argument at args[1] contains the query
+    let query = &args[1];
+    // second argument at args[2] contains the file path
+    let file_path = &args[2];
+    // let's print out what we got
+    println!("Searching for {}", query);
+    println!("In file {}", file_path);
+    
 }
