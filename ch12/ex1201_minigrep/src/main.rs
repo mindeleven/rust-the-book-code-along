@@ -16,7 +16,7 @@
 /// cargo run -- searchstring example-filename.txt
 /// cargo run -- searchstring poem.txt
 /// std::fs is needed to handle files
-use std::{env, fs};
+use std::{env, fs, process};
 
 fn main() {
     // reading command line arguments
@@ -33,7 +33,17 @@ fn main() {
     let file_path = &args[2];
     */
     // let _config = _parse_config(&args);
-    let config = Config::new(&args);
+    // let _config = Config::new(&args);
+    // unwrap_or_else allows us to define some custom, non-panic! error handling
+    // if the Result is an Ok value the inner value that Ok is wrapping gets returned
+    // if the value is an Err value, this method calls the code in the closure
+    let config = Config::build(&args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {}", err);
+        // the process::exit function will stop the program immediately 
+        // and return the number that was passed as the exit status code
+        process::exit(1);
+    });
+
     // let's print out what we got
     println!("Searching for {}", config.query);
     println!("In file {}", config.file_path);
@@ -47,6 +57,7 @@ fn main() {
     println!("Text read from file:\n{}", contents);
 }
 
+/* 
 fn _parse_config(args: &[String]) -> Config {
     // Config is defined to contain owned String values
     // the args variable in main is the owner of the argument 
@@ -58,13 +69,14 @@ fn _parse_config(args: &[String]) -> Config {
 
     Config { query, file_path }
 }
-
+*/
 struct Config {
     query: String,
     file_path: String,
 }
 
 impl Config {
+    /* 
     // logic from the parse_config() functionality gets moved into a new constructor
     fn new(args: &[String]) -> Config {
         if args.len() < 3 {
@@ -74,5 +86,17 @@ impl Config {
         let file_path = args[2].clone();
     
         Config { query, file_path }
+    } */
+    // replacing new() with build() that returns a Result
+    fn build(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            // returning Error variant in case of not enough arguments
+            return Err("not enough arguments");
+        }
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+        
+        // returning Ok with a Config wrapped inside
+        Ok(Config { query, file_path })
     }
 }
