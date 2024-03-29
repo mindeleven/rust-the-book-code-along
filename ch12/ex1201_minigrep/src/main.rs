@@ -47,6 +47,11 @@ fn main() {
 }
 
 fn parse_config(args: &[String]) -> Config {
+    // Config is defined to contain owned String values
+    // the args variable in main is the owner of the argument 
+    // parse_config() only borrows them
+    // the clone method is called on the values to make a full copy of the data 
+    // this full copy is for the Config instance to own
     let query = args[1].clone();
     let file_path = args[2].clone();
 
