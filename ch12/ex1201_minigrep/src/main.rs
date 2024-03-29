@@ -32,7 +32,8 @@ fn main() {
     // second argument at args[2] contains the file path
     let file_path = &args[2];
     */
-    let config = parse_config(&args);
+    let _config = _parse_config(&args);
+    let config = Config::new(&args);
     // let's print out what we got
     println!("Searching for {}", config.query);
     println!("In file {}", config.file_path);
@@ -46,7 +47,7 @@ fn main() {
     println!("Text read from file:\n{}", contents);
 }
 
-fn parse_config(args: &[String]) -> Config {
+fn _parse_config(args: &[String]) -> Config {
     // Config is defined to contain owned String values
     // the args variable in main is the owner of the argument 
     // parse_config() only borrows them
@@ -61,4 +62,14 @@ fn parse_config(args: &[String]) -> Config {
 struct Config {
     query: String,
     file_path: String,
+}
+
+impl Config {
+    // logic from the parse_config() functionality gets moved into a new constructor
+    fn new(args: &[String]) -> Config {
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+    
+        Config { query, file_path }
+    }
 }
