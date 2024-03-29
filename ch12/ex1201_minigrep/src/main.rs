@@ -26,10 +26,13 @@ fn main() {
     // saving the argument values in variables
     // first value args[0] contains the program's/binary's name
     // arguments start at index 1
+    /* 
     // first argument at args[1] contains the query
     let query = &args[1];
     // second argument at args[2] contains the file path
     let file_path = &args[2];
+    */
+    let (query, file_path) = parse_config(&args);
     // let's print out what we got
     println!("Searching for {}", query);
     println!("In file {}", file_path);
@@ -41,4 +44,11 @@ fn main() {
         .expect("Couldn't read the file from the path you provided.");
 
     println!("Text read from file:\n{}", contents);
+}
+
+fn parse_config(args: &[String]) -> (&str, &str) {
+    let query = &args[1];
+    let file_path = &args[2];
+
+    (query, file_path)
 }
