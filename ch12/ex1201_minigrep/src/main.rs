@@ -32,7 +32,7 @@ fn main() {
     // second argument at args[2] contains the file path
     let file_path = &args[2];
     */
-    let _config = _parse_config(&args);
+    // let _config = _parse_config(&args);
     let config = Config::new(&args);
     // let's print out what we got
     println!("Searching for {}", config.query);
@@ -67,6 +67,9 @@ struct Config {
 impl Config {
     // logic from the parse_config() functionality gets moved into a new constructor
     fn new(args: &[String]) -> Config {
+        if args.len() < 3 {
+            panic!("not enough arguments");
+        }
         let query = args[1].clone();
         let file_path = args[2].clone();
     
