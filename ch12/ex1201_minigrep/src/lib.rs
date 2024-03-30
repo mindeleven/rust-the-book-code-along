@@ -14,9 +14,15 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     //    .expect("Couldn't read the file from the path you provided.");
     // the ? operator will return the error value from the current function 
     // for the caller to handle
-    let _contents = fs::read_to_string(config.file_path)?;
-
-    // println!("Text read from file:\n{}", contents);
+    let contents = fs::read_to_string(config.file_path)?;
+    // examples that print a line:
+    // cargo run -- frog data/poem.txt
+    // cargo run -- body data/poem.txt
+    // examples that don't find a line:
+    // cargo run -- monomorphization data/poem.txt
+    for line in search(&config.query, &contents) {
+        println!("{}", line);
+    }
 
     Ok(())
 }
@@ -45,12 +51,12 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     // steps of the search functionality:
     // iterate through each line of the contents
     for line in contents.lines() {
-    // check whether the line contains our query string
-    if line.contains(query) {    
-        // if it does, add it to the list of values we’re returning
-        results.push(line);
-    }
-    // if it doesn’t, do nothing
+        // check whether the line contains our query string
+        if line.contains(query) {    
+            // if it does, add it to the list of values we’re returning
+            results.push(line);
+        }
+        // if it doesn’t, do nothing
     }
     // return the list of results that match
     results
