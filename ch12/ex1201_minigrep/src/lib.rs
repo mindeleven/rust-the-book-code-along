@@ -40,6 +40,10 @@ impl Config {
     }
 }
 
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    vec![]
+}
+
 /// test-driven development (TDD):
 /// (1) write a test that fails and run it to make sure it fails for the reason you expect
 /// (2) write or modify just enough code to make the new test pass
