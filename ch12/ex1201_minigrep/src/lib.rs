@@ -41,7 +41,19 @@ impl Config {
 }
 
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    vec![]
+    let mut results = Vec::new();
+    // steps of the search functionality:
+    // iterate through each line of the contents
+    for line in contents.lines() {
+    // check whether the line contains our query string
+    if line.contains(query) {    
+        // if it does, add it to the list of values we’re returning
+        results.push(line);
+    }
+    // if it doesn’t, do nothing
+    }
+    // return the list of results that match
+    results
 }
 
 /// test-driven development (TDD):
