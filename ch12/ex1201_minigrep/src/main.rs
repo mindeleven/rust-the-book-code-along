@@ -16,7 +16,12 @@
 /// cargo run -- searchstring example-filename.txt
 /// cargo run -- searchstring data/poem.txt
 /// std::fs is needed to handle files
-use std::{env, fs, process};
+use std::{
+    env, 
+    error::Error, 
+    fs, 
+    process
+};
 
 fn main() {
     // cargo run -- searchstring data/poem.txt
@@ -62,11 +67,21 @@ fn main() {
 }
 
 // extracting logic from main
-fn run(config: Config) {
-    let contents = fs::read_to_string(config.file_path)
-        .expect("Couldn't read the file from the path you provided.");
+// return type of the run function is Result<(), Box<dyn Error>>
+// unit type () is returned in case of Ok case
+// in error case the trait object Box<dyn Error> is returned
+// Box<dyn Error> means the function will return a type that implements the Error trait
+// allows us to return error values that may be of different type
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    // let contents = fs::read_to_string(config.file_path)
+    //    .expect("Couldn't read the file from the path you provided.");
+    // the ? operator will return the error value from the current function 
+    // for the caller to handle
+    let contents = fs::read_to_string(config.file_path)?;
 
     println!("Text read from file:\n{}", contents);
+
+    Ok(())
 }
 
 /* 
