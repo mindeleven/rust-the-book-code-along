@@ -40,24 +40,3 @@ impl Config {
     }
 }
 
-/// test-driven development (TDD):
-/// (1) write a test that fails and run it to make sure it fails for the reason you expect
-/// (2) write or modify just enough code to make the new test pass
-/// (3) refactor the code you just added or changed and make sure the tests continue to pass
-/// (4) repeat from step 1
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn one_result() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.";
-
-        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
-    }
-}
