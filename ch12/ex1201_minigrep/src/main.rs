@@ -14,11 +14,12 @@
 /// first task making minigrep accept two command line arguments: 
 /// the file path and a string to search for
 /// cargo run -- searchstring example-filename.txt
-/// cargo run -- searchstring poem.txt
+/// cargo run -- searchstring data/poem.txt
 /// std::fs is needed to handle files
 use std::{env, fs, process};
 
 fn main() {
+    // cargo run -- searchstring data/poem.txt
     // reading command line arguments
     let args: Vec<String> = env::args().collect();
     dbg!(&args);
@@ -51,6 +52,17 @@ fn main() {
     // fs::read_to_string takes the file_path
     // opens that file
     // and returns a std::io::Result<String> of the file’s contents
+    /* 
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Couldn't read the file from the path you provided.");
+
+    println!("Text read from file:\n{}", contents);
+    */
+    run(config);
+}
+
+// extracting logic from main
+fn run(config: Config) {
     let contents = fs::read_to_string(config.file_path)
         .expect("Couldn't read the file from the path you provided.");
 
