@@ -39,19 +39,21 @@ fn main() {
     // if the Result is an Ok value the inner value that Ok is wrapping gets returned
     // if the value is an Err value, this method calls the code in the closure
     let config = Config::build(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
+        // standard library provides the eprintln! macro that prints to the standard error stream
+        eprintln!("Problem parsing arguments: {}", err);
         // the process::exit function will stop the program immediately 
         // and return the number that was passed as the exit status code
         process::exit(1);
     });
 
     // let's print out what we got
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.file_path);
+    // println!("Searching for {}", config.query);
+    // println!("In file {}", config.file_path);
 
     //  use if let rather than unwrap_or_else to check whether run returns an Err value
     if let Err(e) = ex1201_minigrep::run(config) {
-        println!("Application error: {}", e);
+        // standard library provides the eprintln! macro that prints to the standard error stream
+        eprintln!("Application error: {}", e);
         process::exit(1);
     };
 }
