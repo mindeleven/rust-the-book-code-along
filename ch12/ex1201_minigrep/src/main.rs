@@ -63,7 +63,11 @@ fn main() {
 
     println!("Text read from file:\n{}", contents);
     */
-    run(config);
+    //  use if let rather than unwrap_or_else to check whether run returns an Err value
+    if let Err(e) = run(config) {
+        println!("Application error: {}", e);
+        process::exit(1);
+    };
 }
 
 // extracting logic from main
