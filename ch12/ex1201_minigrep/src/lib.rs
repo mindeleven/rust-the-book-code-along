@@ -1,4 +1,5 @@
 use std::{
+    env,
     error::Error, 
     fs, 
 };
@@ -20,7 +21,15 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     // cargo run -- body data/poem.txt
     // examples that don't find a line:
     // cargo run -- monomorphization data/poem.txt
-    for line in search(&config.query, &contents) {
+    // search with environment variable:
+    // IGNORE_CASE=1 cargo run -- to data/poem.txt
+    let results = if config.ignore_case {
+        search_case_insensitive(&config.query, &contents)
+    } else {
+        search(&config.query, &contents)
+    };
+
+    for line in results {
         println!("{}", line);
     }
 
@@ -30,6 +39,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 pub struct Config {
     pub query: String,
     pub file_path: String,
+    pub ignore_case: bool,
 }
 
 impl Config {
@@ -41,8 +51,13 @@ impl Config {
         let query = args[1].clone();
         let file_path = args[2].clone();
         
+        // env::var returns a Result that will be the successful Ok variant 
+        // if the environment variable is set to any value
+        // it will return the Err variant if the environment variable is not set
+        let ignore_case = env::var("IGNORE_CASE").is_ok();
+        
         // returning Ok with a Config wrapped inside
-        Ok(Config { query, file_path })
+        Ok(Config { query, file_path, ignore_case })
     }
 }
 
