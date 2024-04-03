@@ -20,6 +20,16 @@ fn main() {
     for val in v1_iter {
         println!("Got: {}", val);
     }
+
+    // Methods that produce other iterators
+    // Iterator adaptors are methods that don’t consume the iterator
+    // they produce different iterators by changing some aspect of the original iterator
+    let v2 = vec![1, 2, 3];
+    // closure creates new iterator in which each item will be incremented by 1
+    // collect() consumes the iterator 
+    // and collects the resulting values into a collection data type
+    let v3: Vec<_> = v2.iter().map(|x| x + 1).collect();
+    println!("{:?}", v3);
 }
 
 #[test]
