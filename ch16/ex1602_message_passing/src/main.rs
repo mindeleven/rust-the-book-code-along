@@ -49,6 +49,20 @@ fn main() {
     });
     
     // get the value from the receiver in the main thread
+    // recv will block the main thread’s execution 
+    // and wait until a value is sent down the channel
     let received_msg = rx.recv().unwrap();
+    // when the transmitter closes recv will return an error 
+    // signaling that no more values will be coming
     println!("We've received the following message: {}", received_msg);
+
+    // another available method is try_recv 
+    // try_recv() doesn’t block but will instead return a Result<T, E> immediately
+    // -> an Ok value holding a message if one is available 
+    // -> an Err value if there aren’t any messages this time
+    // try_recv() is useful if the thread has other work to do while waiting for messages
+    // -> a loop could call try_recv every() so often, 
+    // -> handles a message if one is available, 
+    // -> otherwise does other work for a little while until checking again
+
 }
