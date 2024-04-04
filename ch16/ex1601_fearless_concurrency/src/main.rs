@@ -12,6 +12,7 @@
 ///    as well as types provided by the standard library
 
 mod m1_threads;
+mod m2_join_handles;
 
 fn main() {
     println!("Coding along with The Rust Programming Language Book, Chapter 16");
