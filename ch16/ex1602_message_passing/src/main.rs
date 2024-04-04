@@ -23,6 +23,9 @@ use std::{
     thread
 };
 
+// examples sending multiple values and seeing the receiver waiting in lib file
+mod m1_multiple_messages;
+
 /// mpsc stands for multiple producer, single consumer
 /// meaning a channel can have multiple sending ends that produce values 
 /// but only one receiving end that consumes those values
