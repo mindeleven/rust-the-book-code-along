@@ -22,16 +22,20 @@ mod test {
     #[test]
     // cargo test tests_threads -- --nocapture
     fn tests_threads() {
+        // of the threads will take turns depends on 
+        // how the operating system schedules the threads
+        // when the main thread of a Rust program completes all spawned threads are shut down
 
         thread::spawn(|| {
-            for i in 1..5 {
-                println!("hi number {} from the spawned thread!", i);
+            for i in 1..10 {
+                println!("hi number {} from the SPAWNED thread!", i);
                 thread::sleep(Duration::from_millis(1));
             }
         });
 
         for i in 1..5 {
             println!("hi number {} from the main thread!", i);
+            // calls to thread::sleep force a thread to stop its execution for a short duration
             thread::sleep(Duration::from_millis(1));
         }
 
