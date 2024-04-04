@@ -13,6 +13,7 @@
 
 mod m1_threads;
 mod m2_join_handles;
+mod m3_move_closures;
 
 fn main() {
     println!("Coding along with The Rust Programming Language Book, Chapter 16");
