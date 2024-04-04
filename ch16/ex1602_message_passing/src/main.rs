@@ -23,14 +23,32 @@ use std::{
     thread
 };
 
+/// mpsc stands for multiple producer, single consumer
+/// meaning a channel can have multiple sending ends that produce values 
+/// but only one receiving end that consumes those values
+
 fn main() {
     
     // creating a channel and assigning the two halves to tx and rx
+    // mpsc::channel returns a tuple
+    // the first element of which is the sending end or transmitter
+    // the second element is the receiving end or receiver
+    // the abbreviations tx and rx are used for transmitter and receiver respectively
     let (tx, rx) = mpsc::channel::<String>();
-/* 
+    
+    // moving the transmitting end into a spawned thread 
+    // tx is moved into the closure
     thread::spawn(move || {
-        let val = String::from("hi");
-        tx.send(val).unwrap();
+        // and have it send one string 
+        // so the spawned thread is communicating with the main thread
+        let val = String::from("The impression that remains [...]");
+        // send() returns a Result<T, E> type
+        // if the receiver has already been dropped (there’s nowhere to send a value)
+        // the send operation will return an error
+        tx.send(val).unwrap(); // unwrap will panic in case of an error
     });
-*/
+    
+    // get the value from the receiver in the main thread
+    let received_msg = rx.recv().unwrap();
+    println!("We've received the following message: {}", received_msg);
 }
