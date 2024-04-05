@@ -97,21 +97,15 @@ pub fn search_case_insensitive<'a>(
     query: &str, 
     contents: &'a str
 ) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
     // calling to_lowercase creates new data rather than referencing existing data
     // query is becomes a String rather than a string slice
     let query = query.to_lowercase();
 
-    for line in contents.lines() {
-        // signature of contains is defined to take a string slice
-        // so query needs to be passed as a reference
-        if line.to_lowercase().contains(&query) {    
-            results.push(line);
-        }
-    }
+    contents
+        .lines()
+        .filter(|line| { line.to_lowercase().contains(&query) })
+        .collect()
 
-    results
 }
 
 /// test-driven development (TDD):
