@@ -31,30 +31,16 @@ use std::{
 use ex1201_minigrep::Config;
 
 fn main() {
-    // cargo run -- searchstring data/poem.txt
-    // reading command line arguments
-    let args: Vec<String> = env::args().collect();
-    dbg!(&args);
 
-    // saving the argument values in variables
-    // first value args[0] contains the program's/binary's name
-    // arguments start at index 1
-    // first argument at args[1] contains the query
-    // second argument at args[2] contains the file path
-    // unwrap_or_else allows us to define some custom, non-panic! error handling
-    // if the Result is an Ok value the inner value that Ok is wrapping gets returned
-    // if the value is an Err value, this method calls the code in the closure
-    let config = Config::build(&args).unwrap_or_else(|err| {
+    // passing the Iterator itself as an argumment to build
+    // the ownership of the iterator returned from env::args gets passed to Config::build directly
+    let config = Config::build(env::args()).unwrap_or_else(|err| {
         // standard library provides the eprintln! macro that prints to the standard error stream
         eprintln!("Problem parsing arguments: {}", err);
         // the process::exit function will stop the program immediately 
         // and return the number that was passed as the exit status code
         process::exit(1);
     });
-
-    // let's print out what we got
-    // println!("Searching for {}", config.query);
-    // println!("In file {}", config.file_path);
 
     //  use if let rather than unwrap_or_else to check whether run returns an Err value
     if let Err(e) = ex1201_minigrep::run(config) {
