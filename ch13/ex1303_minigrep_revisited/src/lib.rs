@@ -79,19 +79,17 @@ impl Config {
 }
 
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-    // steps of the search functionality:
-    // iterate through each line of the contents
-    for line in contents.lines() {
-        // check whether the line contains our query string
-        if line.contains(query) {    
-            // if it does, add it to the list of values we’re returning
-            results.push(line);
-        }
-        // if it doesn’t, do nothing
-    }
-    // return the list of results that match
-    results
+    // rewriting the code in a more concise way using iterator adaptor methods
+    // doing so lets us avoid having a mutable intermediate results vector
+    // the purpose of the search function is to return all lines in contents 
+    // that contain the query
+    // here we use the filter adaptor to keep only the lines 
+    // that line.contains(query) returns true for
+    // the matching lines are collected into another vector with collect
+    contents
+        .lines()
+        .filter(|line| { line.contains(query) })
+        .collect()
 }
 
 // case insensitive search function
