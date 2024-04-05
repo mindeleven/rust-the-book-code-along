@@ -43,17 +43,30 @@ pub struct Config {
 }
 
 impl Config {
+    // signature of the Config::build function
+    // -> the parameter args has a generic type 
+    // with the trait bounds impl Iterator<Item = String> instead of &[String]
     pub fn build(
         mut args: impl Iterator<Item = String>
     ) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            // returning Error variant in case of not enough arguments
-            return Err("not enough arguments");
-        }
+        // args implements the Iterator trait so we can call the next method on it
+        // first value in the return value of env::args is the name of the program
+        // which we don't need and therefore skip
+        args.next();
+        
+        // second we call next to get the value we want to put in the query field of Config
+        // if Some we use a match to extract the value
+        // if None it means not enough arguments were given 
+        // -> we return early with an Err value
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query string"),
+        };
 
-
-        let query = args[1].clone();
-        let file_path = args[2].clone();
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file path"),
+        };
         
         // env::var returns a Result that will be the successful Ok variant 
         // if the environment variable is set to any value
