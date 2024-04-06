@@ -1,0 +1,6 @@
+[package]
+name = "ex1606_shared_state_concurrency"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
