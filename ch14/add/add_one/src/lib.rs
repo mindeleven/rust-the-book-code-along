@@ -14,13 +14,21 @@ pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
 
+/// running cargo test in a workspace structured will run tests for all crates in the workspace
+/// tests for one particular crate in a workspace can be run from the top-level directory 
+/// by using the -p flag and specifying the name of the crate we want to test
+/// `cargo test -p add_one`
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+        // let result = add(2, 2);
+        // assert_eq!(result, 4);
+        // let's just test add_one() for this example
+        assert_eq!(3, add_one(2));
+
     }
 }
