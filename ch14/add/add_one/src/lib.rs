@@ -1,3 +1,11 @@
+use rand::prelude::*;
+
+pub fn use_rand_to_get_f64() -> f64 {
+    let mut rng = rand::thread_rng();
+    let y: f64 = rng.gen(); // generates a float between 0 and 1
+    y
+}
+
 pub fn add_one(x: i32) -> i32 {
     x + 1
 }
