@@ -1,4 +1,5 @@
 [workspace]
-members = [
-    "adder"
+members = [ "add_one",
+    "adder",
+    "adder_one"
 ]
