@@ -1,0 +1,6 @@
+[package]
+name = "ex1502_smart_pointers_with_deref"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
