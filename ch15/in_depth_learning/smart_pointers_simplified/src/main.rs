@@ -90,6 +90,11 @@ fn main() {
     brad2.tools.borrow_mut().push(Rc::downgrade(&wrench2));
 
     println!("Pliers owner: {}", pliers2.owner.name);
-
+    // printing a tool out
+    // we have to upgrade the weak references to Rcs in order to have actual access to the value
+    // upgrade() returns an Option so we gotta unwrap()
+    println!("Brad pliers owner: {}", brad2.tools.borrow()[0].upgrade().unwrap().owner.name);
+    
+    // hidden message
     println!("cats like boxes");
 }
