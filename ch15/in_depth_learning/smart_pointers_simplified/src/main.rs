@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+#![allow(dead_code, unused_variables)]
 /// coding along with the youtube video 
 /// "Box / Rc / Arc / Mutex - Smart Pointers Simplified - Rust" by Bocksdin Coding
 /// @ https://www.youtube.com/watch?v=mNHdD69iLzA
@@ -30,7 +30,13 @@ struct LinkListNode {
 /// Rc stands for reference counter but it's more like a "reference copier"
 /// an Rc creates a new reference to an existing peace of data
 /// you can have two refrences that are owned separately and point both at the same structure
-use std::rc::Rc;
+use std::{
+    rc::{
+        Rc, 
+        Weak
+    }, 
+    cell::RefCell
+};
 
 /// example: one owner can have many tools
 /// a tool can have only one owner
@@ -42,6 +48,22 @@ struct Owner {
 struct Tool {
     // to create a reference around brad we define owner as type Rc<>
     owner: Rc<Owner>
+}
+
+/// and now: the Weak version of Rc<>
+/// Weak guarantees the reference but it does not guarantee the value
+/// example same as above
+/// BUT if we want the list of tools to be owned by brad we need to create a list of Weak tools
+/// we don't use Rc because Rc can lead to a memory leak
+/// AND we define the Tools vector as a RefCell so we can borrow a mutable version of it
+struct Owner2 {
+    name: String,
+    tools: RefCell<Vec<Weak<Tool2>>>
+}
+
+struct Tool2 {
+    // to create a reference around brad we define owner as type Rc<>
+    owner: Rc<Owner2>
 }
 
 fn main() {
@@ -56,6 +78,18 @@ fn main() {
     // another way to do it:
     let pliers = Tool { owner: brad.clone() };
 
+    // example with the Weak version of Rc
+    let brad2 = Rc::from(Owner2 { 
+        name: "Brad".to_string(), tools: RefCell::new(vec![]) 
+    });
+    let pliers2 = Rc::from(Tool2 { owner: Rc::clone(&brad2) });
+    let wrench2 = Rc::from(Tool2 { owner: Rc::clone(&brad2) });
+    // borrow a mutable version of brad.tools and push tools
+    // to do this downgrade the tool from a strong reference to a weak reference
+    brad2.tools.borrow_mut().push(Rc::downgrade(&pliers2));
+    brad2.tools.borrow_mut().push(Rc::downgrade(&wrench2));
+
+    println!("Pliers owner: {}", pliers2.owner.name);
 
     println!("cats like boxes");
 }
