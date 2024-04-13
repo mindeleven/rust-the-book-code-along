@@ -75,21 +75,32 @@ mod tests {
     // the messenger should be told to send the appropriate messages
 
     // for the test we a mock object that will keep track of the messages it’s told to send
-    //. We can create a new instance of the mock object, create a LimitTracker that uses the mock object, call the set_value method on LimitTracker, and then check that the mock object has the messages we expect. Listing 15-21 shows an attempt to implement a mock object to do just that, but the borrow checker won’t allow it:
+    // we'll create a new instance of the mock object, 
+    // create a LimitTracker that uses the mock object, 
+    // call the set_value method on LimitTracker, 
+    // then check that the mock object has the messages we expect
     
+    // defining a MockMessenger struct that has a sent_messages field
+    // to keep track of the messages it’s told to send
     struct MockMessenger {
         sent_messages: Vec<String>
     }
 
     impl MockMessenger {
+        // defining an associated function new to create new MockMessenger values
+        // that start with an empty list of messages
         fn new() -> MockMessenger {
             MockMessenger {
                 sent_messages: vec![]
             }
         }
     }
-
+    
+    // implementing the Messenger trait for MockMessenger 
+    // so we can give a MockMessenger to a LimitTracker
     impl Messenger for MockMessenger {
+        // taking the message passed in as a parameter 
+        // and storing it in the MockMessenger list of sent_messages
         fn send(&self, message: &str) {
             self.sent_messages.push(String::from(message));
         }
@@ -97,6 +108,18 @@ mod tests {
 
     #[test]
     fn it_sends_an_over_75_percent_warning_message() {
-        dbg!("it_sends_an_over_75_percent_warning_message");
+        // testing what happens when the LimitTracker is told 
+        // to set value to something that is more than 75 percent of the max value
+        
+        // creating a new MockMessenger with an empty list of messages
+        let mock_messenger = MockMessenger::new();
+        // creating a new LimitTracker 
+        // with a reference to the new MockMessenger 
+        // and a max value of 100
+        let mut limit_tracker = LimitTracker::new(&mock_messenger, 100);
+        // calling the set_value method on the LimitTracker with a value of 80
+        limit_tracker.set_value(80);
+        // asserting that the list of messages has now one message in it
+        assert_eq!(mock_messenger.sent_messages.len(), 1);
     }
 }
