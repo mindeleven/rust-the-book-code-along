@@ -66,6 +66,11 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    // adding interior mutability with RefCell
+    // we’ll store the sent_messages within a RefCell<T>, 
+    // and by this the send method will be able to modify sent_messages to store the messages 
+    use std::cell::{Ref, RefCell};
+
     // the set_value() function of the LimitTracker doesn’t return anything to make assertions on
     // what we want to achieve with this test is to be able to say that 
     // if we create a LimitTracker 
@@ -83,7 +88,7 @@ mod tests {
     // defining a MockMessenger struct that has a sent_messages field
     // to keep track of the messages it’s told to send
     struct MockMessenger {
-        sent_messages: Vec<String>
+        sent_messages: RefCell<Vec<String>>
     }
 
     impl MockMessenger {
@@ -91,7 +96,7 @@ mod tests {
         // that start with an empty list of messages
         fn new() -> MockMessenger {
             MockMessenger {
-                sent_messages: vec![]
+                sent_messages: RefCell::new(vec![])
             }
         }
     }
@@ -102,7 +107,12 @@ mod tests {
         // taking the message passed in as a parameter 
         // and storing it in the MockMessenger list of sent_messages
         fn send(&self, message: &str) {
-            self.sent_messages.push(String::from(message));
+            // we now can call borrow_mut on the RefCell<Vec<String>> 
+            // in self.sent_messages to get a mutable reference 
+            // to the value inside the RefCell<Vec<String>>
+            // then we can call push on the mutable reference 
+            // to the vector to keep track of the messages sent during the test
+            self.sent_messages.borrow_mut().push(String::from(message));
         }
     }
 
@@ -120,6 +130,7 @@ mod tests {
         // calling the set_value method on the LimitTracker with a value of 80
         limit_tracker.set_value(80);
         // asserting that the list of messages has now one message in it
-        assert_eq!(mock_messenger.sent_messages.len(), 1);
+        // calling borrow on the RefCell<Vec<String>> to get an immutable reference to the vector
+        assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
     }
 }
