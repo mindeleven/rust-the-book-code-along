@@ -14,11 +14,19 @@
 /// 
 /// all the library itself needs is something that implements a trait 
 /// we’ll provide called Messenger
+/// 
+/// a library to keep track of how close a value is to a maximum value 
+/// and warn when the value is at certain levels
+/// sourcecode taken from https://doc.rust-lang.org/book/ch15-05-interior-mutability.html
 
 pub trait Messenger {
+    // the Messenger trait has only one method called send 
+    // send() takes an immutable reference to self and the text of the message
     fn send(&self, msg: &str);
 }
 
+/// the Messenger trait is the interface the LimitTracker struct needs to implement 
+/// so that it can be used in the same way a real object is
 pub struct LimitTracker<'a, T: Messenger> {
     messenger: &'a T,
     value: usize,
@@ -37,6 +45,7 @@ where
         }
     }
     
+    // set_value() is the behavior of the LimitTracker that we want to test
     pub fn set_value(&mut self, value: usize) {
         self.value = value;
 
@@ -57,6 +66,34 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    // the set_value() function of the LimitTracker doesn’t return anything to make assertions on
+    // what we want to achieve with this test is to be able to say that 
+    // if we create a LimitTracker 
+    // -> with something that implements the Messenger trait 
+    // -> and a particular value for max
+    // then, when we pass different numbers for value, 
+    // the messenger should be told to send the appropriate messages
+
+    // for the test we a mock object that will keep track of the messages it’s told to send
+    //. We can create a new instance of the mock object, create a LimitTracker that uses the mock object, call the set_value method on LimitTracker, and then check that the mock object has the messages we expect. Listing 15-21 shows an attempt to implement a mock object to do just that, but the borrow checker won’t allow it:
+    
+    struct MockMessenger {
+        sent_messages: Vec<String>
+    }
+
+    impl MockMessenger {
+        fn new() -> MockMessenger {
+            MockMessenger {
+                sent_messages: vec![]
+            }
+        }
+    }
+
+    impl Messenger for MockMessenger {
+        fn send(&self, message: &str) {
+            self.sent_messages.push(String::from(message));
+        }
+    }
 
     #[test]
     fn it_sends_an_over_75_percent_warning_message() {
