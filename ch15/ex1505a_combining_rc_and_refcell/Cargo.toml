@@ -1,0 +1,6 @@
+[package]
+name = "ex1505a_combining_rc_and_refcell"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
