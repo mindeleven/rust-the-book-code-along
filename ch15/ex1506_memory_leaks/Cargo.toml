@@ -1,0 +1,6 @@
+[package]
+name = "ex1506_memory_leaks"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
