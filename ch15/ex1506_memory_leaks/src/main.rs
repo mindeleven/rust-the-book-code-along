@@ -9,7 +9,7 @@
 /// Creating a reference cycle
 use crate::List::{Cons, Nil};
 use std::cell::RefCell;
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 
 /// a Cons list definition that holds a RefCell<T> 
 /// so we can modify what a Cons variant is referring to
@@ -29,6 +29,20 @@ impl List {
             Nil => None,
         }
     }
+}
+
+// creating a tree data structure: a node with child nodes
+// building a tree with nodes that know about their child nodes
+// the Node should own its children
+// and it should be able to share that ownership with variables 
+// so that each Node can be accessed in the tree directly
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    children: RefCell<Vec<Rc<Node>>>,
+    // adding a parent field to make the child node aware of its parent
+    // for the type of parent we use Weak<T>
+    parent: RefCell<Weak<Node>>,
 }
 
 fn main() {
@@ -53,4 +67,27 @@ fn main() {
 
     println!("b rc count after changing a = {}", Rc::strong_count(&b));
     println!("a rc count after changing a = {}", Rc::strong_count(&a));
+
+    // creating a tree data structure: a node with child nodes
+    // creating a leaf node with no children
+    let leaf = Rc::new(Node {
+        value: 3,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+    });
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+
+    // creating a branch node with leaf as one of its children
+    // the Rc<Node> gets cloned in leaf and storrd in branch
+    // which means the Node in leaf now has two owners: leaf and branch
+    let branch = Rc::new(Node {
+        value: 5,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![Rc::clone(&leaf)]),
+    });
+
+    *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
+
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+
 }
