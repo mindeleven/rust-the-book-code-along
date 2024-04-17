@@ -21,6 +21,8 @@
 use std::sync::{Arc, Mutex};
 use std::thread;
 
+/// brace yourself: Mutex<T> comes with the risk of creating deadlocks
+
 fn main() {
     // using a mutex in a single-threaded context
     let m = Mutex::new(5);
