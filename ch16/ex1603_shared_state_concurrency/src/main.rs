@@ -16,6 +16,7 @@
 /// Using mutexes to allow access to data from one thread at a time
 use std::sync::Mutex;
 use std::thread;
+use std::rc::Rc;
 
 fn main() {
     // using a mutex in a single-threaded context
@@ -43,10 +44,14 @@ fn main() {
     // sharing a Mutex<T> between multiple threads
     // spinning up 10 threads and have them each increment a counter value by 1
     // so the counter goes from 0 to 10
-    let counter = Mutex::new(0);
+    // wrapping the Mutex<T> in Rc<T> to give the value multiple owners 
+    // by using the smart pointer
+    let counter = Rc::new(Mutex::new(0));
     let mut handles = vec![];
 
     for _ in 1..10 {
+        // cloning the Rc<T> (that's wrapping the Mutex<T>) before moving ownership to the thread
+        let counter = Rc::clone(&counter);
         // we give all the threads the same closure that moves the counter into the thread
         let handle = thread::spawn(move || {
             // the closure acquires a lock on the Mutex<T> 
@@ -58,6 +63,7 @@ fn main() {
         });
         // collecting all the join handles
         handles.push(handle);
+        
     }
     // calling join on each handle to make sure all the threads finish
     for handle in handles {
