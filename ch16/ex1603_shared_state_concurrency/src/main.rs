@@ -15,6 +15,7 @@
 ///
 /// Using mutexes to allow access to data from one thread at a time
 use std::sync::Mutex;
+use std::thread;
 
 fn main() {
     // using a mutex in a single-threaded context
@@ -38,4 +39,30 @@ fn main() {
     // after dropping the lock we can print the mutex value 
     // and see that we actually could change the inner i32 to 6
     println!("m = {:?} // after inner scope", m);
+
+    // sharing a Mutex<T> between multiple threads
+    // spinning up 10 threads and have them each increment a counter value by 1
+    // so the counter goes from 0 to 10
+    let counter = Mutex::new(0);
+    let mut handles = vec![];
+
+    for _ in 1..10 {
+        // we give all the threads the same closure that moves the counter into the thread
+        let handle = thread::spawn(move || {
+            // the closure acquires a lock on the Mutex<T> 
+            let mut num = counter.lock().unwrap();
+            // then adds 1 to the value in the mutex
+            *num += 1;
+            // once a thread finishes running its closure num will go out of scope
+            // and release the lock
+        });
+        // collecting all the join handles
+        handles.push(handle);
+    }
+    // calling join on each handle to make sure all the threads finish
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
 }
