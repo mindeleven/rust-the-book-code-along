@@ -14,9 +14,12 @@
 /// -> when done with the data the mutex guarded data must be unlocked
 ///
 /// Using mutexes to allow access to data from one thread at a time
-use std::sync::Mutex;
+/// Arc<T> is a type like Rc<T> that is safe to use in concurrent situations
+/// the a stands for atomic, meaning it’s an atomically reference counted type
+/// -> Atomic reference counting with Arc<T>
+/// atomics work like primitive types but are safe to share across threads
+use std::sync::{Arc, Mutex};
 use std::thread;
-use std::rc::Rc;
 
 fn main() {
     // using a mutex in a single-threaded context
@@ -44,14 +47,14 @@ fn main() {
     // sharing a Mutex<T> between multiple threads
     // spinning up 10 threads and have them each increment a counter value by 1
     // so the counter goes from 0 to 10
-    // wrapping the Mutex<T> in Rc<T> to give the value multiple owners 
+    // wrapping the Mutex<T> in Arc<T> to give the value multiple owners 
     // by using the smart pointer
-    let counter = Rc::new(Mutex::new(0));
+    let counter = Arc::new(Mutex::new(0));
     let mut handles = vec![];
 
-    for _ in 1..10 {
-        // cloning the Rc<T> (that's wrapping the Mutex<T>) before moving ownership to the thread
-        let counter = Rc::clone(&counter);
+    for _ in 0..10 {
+        // cloning the Arc<T> (that's wrapping the Mutex<T>) before moving ownership to the thread
+        let counter = Arc::clone(&counter);
         // we give all the threads the same closure that moves the counter into the thread
         let handle = thread::spawn(move || {
             // the closure acquires a lock on the Mutex<T> 
