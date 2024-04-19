@@ -38,24 +38,63 @@ impl Post {
         // returning an empty string slice as long as the post in the draft state
         ""
     }
+
+    // functionality to request a review of a post
+    // -> requesting the review should change its state from Draft to PendingReview
+    pub fn request_review(&mut self) {
+        // the request_review method needs to take ownership of the state value
+        // to consume the old state, 
+        // we call the take method to take the Some value out of the state field 
+        // and leave a None in its place
+        // this lets us move the state value out of Post rather than borrowing it
+        // then we’ll set the post’s state value to the result of this operation
+        if let Some(s) = self.state.take() {
+            // calling an internal request_review method on the current state of Post
+            // this second request_review method consumes the current state 
+            // and returns a new state
+            self.state = Some(s.request_review())
+        }
+    }
+
 }
 
 // the State trait defines the behavior shared by different post states
 // the state objects are Draft, PendingReview, and Published
 // and they will all implement the State trait
-trait State {}
+trait State {
+    // adding the request_review method to the State trait
+    // the self: Box<Self> syntax means the method is only valid 
+    // when called on a Box holding the type
+    fn request_review(self: Box<Self>) -> Box<dyn State>;
+}
 
 // the Draft state is the state we want a post to start in
 struct Draft {}
 
-impl State for Draft {}
+impl State for Draft {
+    // the request_review method here returns a new, boxed instance of a new PendingReview
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
+        Box::new(PendingReview {})
+    }
+}
 
+// the PendingReview struct represents the state when a post is waiting for a review
+struct PendingReview {}
+// PendingReview implements the request_review method but doesn’t do any transformations
+impl State for PendingReview {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
+        // it returns itself
+        // because when we request a review on a post already in the PendingReview state
+        // it should stay in the PendingReview state
+        self
+    }
+}
 
 fn main() {
     let mut post = Post::new();
 
     post.add_text("I ate a salad for lunch today");
-    // assert_eq!("", post.content());
+    assert_eq!("", post.content());
 
     println!("Our post so far: {}", post.content);
 }
