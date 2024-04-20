@@ -54,6 +54,16 @@ impl Post {
             // and returns a new state
             self.state = Some(s.request_review())
         }
+
+    }
+
+    // the approve method will set state to the value that the current state says 
+    // it should have when that state is approved,
+    pub fn approve(&mut self) {
+        // functionality same as above, just with callíng approve
+        if let Some(s) = self.state.take() {
+            self.state = Some(s.approve())
+        }
     }
 
 }
@@ -66,6 +76,9 @@ trait State {
     // the self: Box<Self> syntax means the method is only valid 
     // when called on a Box holding the type
     fn request_review(self: Box<Self>) -> Box<dyn State>;
+    // the approve method will set state to the value that the current state says 
+    // it should have when that state is approved,
+    fn approve(self: Box<Self>) -> Box<dyn State>;
 }
 
 // the Draft state is the state we want a post to start in
@@ -75,6 +88,13 @@ impl State for Draft {
     // the request_review method here returns a new, boxed instance of a new PendingReview
     fn request_review(self: Box<Self>) -> Box<dyn State> {
         Box::new(PendingReview {})
+    }
+
+    fn approve(self: Box<Self>) -> Box<dyn State> {
+        // it returns itself
+        // because when we request a review on a post already in the PendingReview state
+        // it should stay in the PendingReview state
+        self
     }
 }
 
@@ -88,6 +108,26 @@ impl State for PendingReview {
         // it should stay in the PendingReview state
         self
     }
+    
+    // when calling approve on PendingReview it 
+    // returns a new boxed instance of the Published struct
+    fn approve(self: Box<Self>) -> Box<dyn State> {
+        Box::new(Published {})
+    }
+}
+
+// adding a new struct that implements the Published state for State
+struct Published {}
+// Published implements the request_review method but doesn’t do any transformations
+impl State for Published {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
+        self
+    }
+
+    fn approve(self: Box<Self>) -> Box<dyn State> {
+        self
+    }
+
 }
 
 fn main() {
