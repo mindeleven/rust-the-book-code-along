@@ -147,6 +147,12 @@ impl State for Published {
     fn approve(self: Box<Self>) -> Box<dyn State> {
         self
     }
+    
+    // only the Published struct will override the content method 
+    // and return the value in post.content
+    fn content<'a>(&self, post: &'a Post) -> &'a str {
+        &post.content
+    }
 
 }
 
