@@ -36,7 +36,18 @@ impl Post {
     // implementing the content method
     pub fn content(&self) -> &str {
         // returning an empty string slice as long as the post in the draft state
-        ""
+        // ""
+        // updating the content method on Post
+        // the value returned from content should depend on the current state of the Post
+        // so we’re going to have the Post delegate to a content method defined on its state
+        // as_ref() is called on the Option because we want 
+        // a reference to the value inside the Option
+        // when we call as_ref() an Option<&Box<dyn State>> is returned
+        // we know thet unwrap() will never panic
+        // -> the methods on Post ensure that state will always contain a Some value 
+        // with calling content() deref coercion will take effect on the & and the Box
+        // -> content() will be called on the type that implements the State trait
+        self.state.as_ref().unwrap().content(self)
     }
 
     // functionality to request a review of a post
@@ -76,9 +87,18 @@ trait State {
     // the self: Box<Self> syntax means the method is only valid 
     // when called on a Box holding the type
     fn request_review(self: Box<Self>) -> Box<dyn State>;
+
     // the approve method will set state to the value that the current state says 
     // it should have when that state is approved,
     fn approve(self: Box<Self>) -> Box<dyn State>;
+    
+    // Because the goal is to keep all these rules inside the structs that implement State, 
+    // adding a method to call a content method on the value in state 
+    // and passing the post instance as an argument
+    fn content<'a>(&self, post: &'a Post) -> &'a str {
+        ""
+    }
+
 }
 
 // the Draft state is the state we want a post to start in
