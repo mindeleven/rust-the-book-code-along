@@ -1,0 +1,6 @@
+[package]
+name = "ex1801_patterns_matching"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
