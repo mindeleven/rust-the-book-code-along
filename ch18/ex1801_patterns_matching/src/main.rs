@@ -1,4 +1,4 @@
-#![allow(unused_imports)]
+#![allow(unused_imports, unused_variables)]
 
 use std::error::Error;
 
@@ -56,6 +56,20 @@ fn main() {
     for (index, value) in v.iter().enumerate() {
         println!("value at index {}: {}", index, value);
     }
+    
+    // let Statements
+    // using a pattern to destructure a tuple and create three variables at once
+    let (x, y, z) = (1, 3, 5);
 
+    // Function Parameters
+    // function parameters can also be patterns
+    let point = (3, 5);
+    print_coordinates(&point);
 
+}
+
+/// Function Parameters
+/// function parameters can also be patterns
+fn print_coordinates(&(x, y): &(i32, i32)) {
+    println!("Current location: ({}, {})", x, y);
 }
