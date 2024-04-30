@@ -3,6 +3,7 @@
 /// Building a Single-Threaded Web Server
 
 use std::{
+    fs,
     net::{
         TcpListener, 
         TcpStream
@@ -51,9 +52,21 @@ fn handle_connection(mut stream: TcpStream) {
         .collect();
 
     // println!("Request: {:#?}", http_request);
-    let response = "HTTP/1.1 200 OK\r\n\r\n";
+
     // writing a tiny successful HTTP response to the stream
+    // let response = "HTTP/1.1 200 OK\r\n\r\n";
     // as_bytes() converts the string data to bytes
     // write_all() takes a &[u8] and sends those bytes directly down the connection
+
+    // Sending the contents of hello.html as the body of the response
+    let status_line = "HTTP/1.1 200 OK";
+    let contents = fs::read_to_string("files/hello.html").unwrap();
+    // adding the Content-Length header and setting it to the size of our response body
+    // ensures a valid HTTP response
+    let length = contents.len();
+    // we use format! to add the file’s contents as the body of the success response
+    let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+
     stream.write_all(response.as_bytes()).unwrap();
+
 }
