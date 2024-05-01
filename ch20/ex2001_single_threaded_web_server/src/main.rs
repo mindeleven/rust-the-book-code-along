@@ -13,7 +13,9 @@ use std::{
     io::{
         prelude::*,
         BufReader
-    }, 
+    },
+    thread,
+    time::Duration
 };
 
 fn main() {
@@ -31,7 +33,7 @@ fn main() {
 
         // println!("Connection established!");
 
-        handle_connection_3(stream);
+        handle_connection_slow(stream);
     }
 
     println!("The sky above the port was the color of television, tuned to a dead channel.");
@@ -113,7 +115,7 @@ fn _handle_connection_2(mut stream: TcpStream) {
 }
 
 // refactoring handle_connection_2 
-fn handle_connection_3(mut stream: TcpStream) {
+fn _handle_connection_3(mut stream: TcpStream) {
     let buf_reader: BufReader<&mut TcpStream> = BufReader::new(&mut stream);
     let request_line = buf_reader.lines().next().unwrap().unwrap();
     
@@ -121,8 +123,6 @@ fn handle_connection_3(mut stream: TcpStream) {
     // if and else blocks now only return values for the status line and filename in a tuple
     let (status_line, filename) = if request_line == "GET / HTTP/1.1" {
         ("HTTP/1.1 200 OK", "files/hello.html")
-    } else if request_line == "GET /something_else HTTP/1.1" {
-        ("HTTP/1.1 200 OK", "files/something_else.html")
     } else {
         ("HTTP/1.1 404 NOT FOUND", "files/404.html")
     };
@@ -135,4 +135,31 @@ fn handle_connection_3(mut stream: TcpStream) {
 
     stream.write_all(response.as_bytes()).unwrap();
     
+}
+
+// handling a request with a simulated slow response
+fn handle_connection_slow(mut stream: TcpStream) { 
+    let buf_reader: BufReader<&mut TcpStream> = BufReader::new(&mut stream);
+    let request_line = buf_reader.lines().next().unwrap().unwrap();
+    
+    // switching from if to match
+    // request_line needs to be turnes into a slice explicitly to pattern match the string values
+    let (status_line, filename) = match &request_line[..] {
+        "GET / HTTP/1.1" => ("HTTP/1.1 200 OK", "files/hello.html"),
+        "GET /something_else HTTP/1.1" => {
+            // handling a request to /something_else with a simulated slow response
+            thread::sleep(Duration::from_secs(5));
+            ("HTTP/1.1 200 OK", "files/something_else.html")
+        }
+        _ => ("HTTP/1.1 404 NOT FOUND", "files/404.html"),
+    };
+
+    let contents = fs::read_to_string(filename).unwrap();
+    let length = contents.len();
+
+    let response =
+        format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+
+    stream.write_all(response.as_bytes()).unwrap();
+
 }
