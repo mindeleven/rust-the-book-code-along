@@ -1,0 +1,6 @@
+[package]
+name = "ex2002_multi_threaded_server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
