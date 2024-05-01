@@ -122,7 +122,7 @@ fn handle_connection_3(mut stream: TcpStream) {
     let (status_line, filename) = if request_line == "GET / HTTP/1.1" {
         ("HTTP/1.1 200 OK", "files/hello.html")
     } else if request_line == "GET /something_else HTTP/1.1" {
-        ("HTTP/1.1 404 NOT FOUND", "files/something_else.html")
+        ("HTTP/1.1 200 OK", "files/something_else.html")
     } else {
         ("HTTP/1.1 404 NOT FOUND", "files/404.html")
     };
