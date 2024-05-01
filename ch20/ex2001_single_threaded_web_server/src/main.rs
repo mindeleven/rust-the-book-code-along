@@ -31,7 +31,7 @@ fn main() {
 
         // println!("Connection established!");
 
-        handle_connection_2(stream);
+        handle_connection_3(stream);
     }
 
     println!("The sky above the port was the color of television, tuned to a dead channel.");
@@ -72,11 +72,11 @@ fn _handle_connection(mut stream: TcpStream) {
 }
 
 // rewriting the handle_connection functionality to handle different requests (by uri)
-fn handle_connection_2(mut stream: TcpStream) {
+fn _handle_connection_2(mut stream: TcpStream) {
     // checking that the browser is requesting / before returning the HTML file
     // returning an error if the browser requests anything else
     
-    let buf_reader = BufReader::new(&mut stream);
+    let buf_reader: BufReader<&mut TcpStream> = BufReader::new(&mut stream);
     // we only want the first line of the HTTP request 
     // so we’re calling next to get the first item from the iterator
     // unwrap() no. 1 takes care of the Option and stops the program if the iterator has no items
@@ -110,4 +110,27 @@ fn handle_connection_2(mut stream: TcpStream) {
         stream.write_all(response.as_bytes()).unwrap();
     }
 
+}
+
+// refactoring handle_connection_2 
+fn handle_connection_3(mut stream: TcpStream) {
+    let buf_reader: BufReader<&mut TcpStream> = BufReader::new(&mut stream);
+    let request_line = buf_reader.lines().next().unwrap().unwrap();
+    
+    // replacing the if / else blocks
+    // if and else blocks now only return values for the status line and filename in a tuple
+    let (status_line, filename) = if request_line == "GET / HTTP/1.1" {
+        ("HTTP/1.1 200 OK", "files/hello.html")
+    } else {
+        ("HTTP/1.1 404 NOT FOUND", "files/404.html")
+    };
+
+    let contents = fs::read_to_string(filename).unwrap();
+    let length = contents.len();
+
+    let response =
+        format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+
+    stream.write_all(response.as_bytes()).unwrap();
+    
 }
