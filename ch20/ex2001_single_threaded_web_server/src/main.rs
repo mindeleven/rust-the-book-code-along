@@ -70,3 +70,35 @@ fn handle_connection(mut stream: TcpStream) {
     stream.write_all(response.as_bytes()).unwrap();
 
 }
+
+// rewriting the handle_connection functionality to handle different requests (by uri)
+fn handle_connection_2(mut stream: TcpStream) {
+    // checking that the browser is requesting / before returning the HTML file
+    // returning an error if the browser requests anything else
+    
+    let buf_reader = BufReader::new(&mut stream);
+    // we only want the first line of the HTTP request 
+    // so we’re calling next to get the first item from the iterator
+    // unwrap() no. 1 takes care of the Option and stops the program if the iterator has no items
+    // unwrap() no. 2 handles the Result
+    let request_line = buf_reader.lines().next().unwrap().unwrap();
+    
+    // checking request_line to see 
+    // if it equals the request line of a GET request to the / path
+    if request_line == "GET / HTTP/1.1" {
+        // in this case all like above
+        let status_line = "HTTP/1.1 200 OK";
+        let contents = fs::read_to_string("files/hello.html").unwrap();
+        let length = contents.len();
+
+        let response = format!(
+            "{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}"
+        );
+
+        stream.write_all(response.as_bytes()).unwrap();
+
+    } else {
+        // do something else
+    }
+
+}
