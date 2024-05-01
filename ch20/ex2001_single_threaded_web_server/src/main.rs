@@ -31,13 +31,13 @@ fn main() {
 
         // println!("Connection established!");
 
-        handle_connection(stream);
+        handle_connection_2(stream);
     }
 
     println!("The sky above the port was the color of television, tuned to a dead channel.");
 }
 
-fn handle_connection(mut stream: TcpStream) {
+fn _handle_connection(mut stream: TcpStream) {
     // creating a new BufReader instance that wraps a mutable reference to the stream
     // BufReader adds buffering by managing calls to the std::io::Read trait
     let buf_reader = BufReader::new(&mut stream);
@@ -98,7 +98,16 @@ fn handle_connection_2(mut stream: TcpStream) {
         stream.write_all(response.as_bytes()).unwrap();
 
     } else {
-        // do something else
+        // do something else like returning a response with the status code 404
+        let status_line = "HTTP/1.1 404 NOT FOUND";
+        let contents = fs::read_to_string("files/404.html").unwrap();
+        let length = contents.len();
+
+        let response = format!(
+            "{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}"
+        );
+
+        stream.write_all(response.as_bytes()).unwrap();
     }
 
 }
