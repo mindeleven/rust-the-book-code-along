@@ -30,10 +30,13 @@ fn main() {
     for stream in listener.incoming() {
         // single stream represents an open connection between the client and the server
         let stream = stream.unwrap();
-
-        // println!("Connection established!");
-
-        handle_connection(stream);
+        
+        // spawning a new thread for each stream
+        thread::spawn(|| {
+            // running the code in the closure in the new thread
+            handle_connection(stream);
+        });
+        
     }
 
     println!("The sky above the port was the color of television, tuned to a dead channel.");
