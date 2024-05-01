@@ -18,11 +18,16 @@ use std::{
     time::Duration
 };
 
+mod threadpool;
+use threadpool::ThreadPool;
+
 fn main() {
     // listening to a TCP connection
     // at the local address 127.0.0.1:7878 for incoming TCP streams
     // bind will return a new TcpListener instance and returns a Result<T, E>
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    // creating a thread pool with a configurable number of threads
+    let pool = ThreadPool::new(4);
     
     // the incoming method on TcpListener returns an iterator 
     // with a sequence of streams of type TcpStream
@@ -32,7 +37,9 @@ fn main() {
         let stream = stream.unwrap();
         
         // spawning a new thread for each stream
-        thread::spawn(|| {
+        // thread::spawn(|| {
+        // using the threadpool instead
+        pool.execute(|| {
             // running the code in the closure in the new thread
             handle_connection(stream);
         });
