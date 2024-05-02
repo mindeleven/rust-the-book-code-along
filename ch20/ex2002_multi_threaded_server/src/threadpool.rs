@@ -14,7 +14,9 @@ pub struct ThreadPool {
 }
 
 // Job struct that will hold the closures we want to send down the channel
-struct Job;
+// changing Job from a struct to a type alias for a trait object 
+// that holds the type of closure that execute receives
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 impl ThreadPool {
     /// Create a new ThreadPool.
@@ -74,6 +76,9 @@ impl ThreadPool {
     where
         F: FnOnce() + Send + 'static,
     {
+        let job = Box::new(f);
+
+        self.sender.send(job).unwrap();
     }
 }
 
