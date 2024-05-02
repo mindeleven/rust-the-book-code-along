@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 use std::{
-    sync::mpsc, 
+    sync::{Arc, mpsc, Mutex}, 
     thread
 };
 
@@ -31,6 +31,8 @@ impl ThreadPool {
 
         let (sender, receiver) = mpsc::channel();
 
+        let receiver = Arc::new(Mutex::new(receiver));
+
         // initializing the vector with a capacity of size
         // the with_capacity function performs the same task as Vec::new 
         // but with an important difference: it preallocates space in the vector
@@ -50,7 +52,9 @@ impl ThreadPool {
             // store the worker in the vector
             // passing a receiver of the channel into each worker 
             // as the thread pool creates the channel
-            workers.push(Worker::new(id, receiver));
+            // using the Arc type because it will let multiple workers own the receiver
+            // and Mutex will ensure that only one worker gets a job from the receiver at a time
+            workers.push(Worker::new(id, Arc::clone(&receiver)));
         }
 
         // returned a ThreadPool instance containing the threads
@@ -93,7 +97,7 @@ impl Worker {
     // defining a Worker::new function that takes an id number and returns a Worker instance
     // that holds the id and a thread spawned with an empty closure
 
-    fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         // spawning thread with empty closure
         // passing a receiver of the channel into each worker 
         // as the thread pool creates the channel
