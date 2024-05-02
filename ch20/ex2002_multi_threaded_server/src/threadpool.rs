@@ -1,4 +1,9 @@
-pub struct ThreadPool;
+use std::thread;
+
+pub struct ThreadPool {
+    // ThreadPool to hold a vector of thread::JoinHandle<()> instances
+    threads: Vec<thread::JoinHandle<()>>,
+}
 
 impl ThreadPool {
     /// Create a new ThreadPool.
@@ -13,7 +18,17 @@ impl ThreadPool {
         // and have the program panic if it receives a zero by using the assert! macro
         assert!(size > 0);
 
-        ThreadPool
+        // initializing the vector with a capacity of size
+        let mut threads = Vec::with_capacity(size);
+
+        // setting up a for loop that will run some code to create the threads
+        for _ in 0..size {
+            // create some threads and store them in the vector
+
+        }
+
+        // returned a ThreadPool instance containing the threads
+        ThreadPool { threads }
     }
     // pool.execute needs to be implemented in a way that it takes the closure 
     // and gives it to a thread in the pool to run
