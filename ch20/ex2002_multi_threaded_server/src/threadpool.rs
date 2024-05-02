@@ -2,7 +2,9 @@ use std::thread;
 
 pub struct ThreadPool {
     // ThreadPool to hold a vector of thread::JoinHandle<()> instances
-    threads: Vec<thread::JoinHandle<()>>,
+    // threads: Vec<thread::JoinHandle<()>>,
+    // change ThreadPool to hold a vector of Worker instances
+    workers: Vec<Worker>,
 }
 
 impl ThreadPool {
@@ -19,16 +21,30 @@ impl ThreadPool {
         assert!(size > 0);
 
         // initializing the vector with a capacity of size
-        let mut threads = Vec::with_capacity(size);
+        // the with_capacity function performs the same task as Vec::new 
+        // but with an important difference: it preallocates space in the vector
+        // let mut threads = Vec::with_capacity(size);
+
+        let mut workers = Vec::with_capacity(size);
 
         // setting up a for loop that will run some code to create the threads
-        for _ in 0..size {
+        for id in 0..size {
             // create some threads and store them in the vector
+            // we want to create the threads and have them wait for code that we’ll send later
+            // we'll implement the Worker data structure as a new data structure 
+            // between the ThreadPool and the threads to get this behavior
 
+            // use the for loop counter to generate an id
+            // create a new Worker with that id
+            // store the worker in the vector
+            workers.push(Worker::new(id));
         }
 
         // returned a ThreadPool instance containing the threads
-        ThreadPool { threads }
+        // ThreadPool { threads }
+
+        ThreadPool { workers }
+
     }
     // pool.execute needs to be implemented in a way that it takes the closure 
     // and gives it to a thread in the pool to run
@@ -41,5 +57,28 @@ impl ThreadPool {
     where
         F: FnOnce() + Send + 'static,
     {
+    }
+}
+
+// we want to create the threads and have them wait for code that we’ll send later
+// we'll implement the Worker data structure as a new data structure 
+// between the ThreadPool and the threads to get this behavior
+
+// defining a Worker struct that holds an id and a JoinHandle<()>
+struct Worker {
+    id: usize,
+    thread: thread::JoinHandle<()>,
+}
+
+impl Worker {
+    // defining a Worker::new function that takes an id number and returns a Worker instance
+    // that holds the id and a thread spawned with an empty closure
+
+    fn new(id: usize) -> Worker {
+        // spawning thread with empty closure
+        let thread = thread::spawn(|| {});
+        
+        // returning a Worker instance that holds the id and a thread spawned with an empty closure
+        Worker { id, thread }
     }
 }
