@@ -106,10 +106,21 @@ impl Worker {
         // spawning thread with empty closure
         // passing a receiver of the channel into each worker 
         // as the thread pool creates the channel
-        let thread = thread::spawn(|| {
+
+        // we need the closure to loop forever
+        // asking the receiving end of the channel for a job and running the job when it gets one
+        let thread = thread::spawn(move || loop {
             // we want to use the receiver in the thread that the workers spawn
             // so we’ll reference the receiver parameter in the closure
-            receiver;
+            
+            // calling the lock on the receiver to acquire the mutex
+            // then calling unwrap to panic on any errors
+            // if we get the lock we call recv to receive a Job from the channel
+            let job = receiver.lock().unwrap().recv().unwrap();
+
+            println!("Worker {id} got a job; executing.");
+
+            job();
         });
         
         // returning a Worker instance that holds the id and a thread spawned with an empty closure
