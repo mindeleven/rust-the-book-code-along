@@ -1,11 +1,20 @@
-use std::thread;
+#![allow(dead_code)]
+
+use std::{
+    sync::mpsc, 
+    thread
+};
 
 pub struct ThreadPool {
     // ThreadPool to hold a vector of thread::JoinHandle<()> instances
     // threads: Vec<thread::JoinHandle<()>>,
     // change ThreadPool to hold a vector of Worker instances
     workers: Vec<Worker>,
+    sender: mpsc::Sender<Job>,
 }
+
+// Job struct that will hold the closures we want to send down the channel
+struct Job;
 
 impl ThreadPool {
     /// Create a new ThreadPool.
@@ -19,6 +28,8 @@ impl ThreadPool {
         // checking that size is greater than zero 
         // and have the program panic if it receives a zero by using the assert! macro
         assert!(size > 0);
+
+        let (sender, receiver) = mpsc::channel();
 
         // initializing the vector with a capacity of size
         // the with_capacity function performs the same task as Vec::new 
@@ -37,13 +48,15 @@ impl ThreadPool {
             // use the for loop counter to generate an id
             // create a new Worker with that id
             // store the worker in the vector
-            workers.push(Worker::new(id));
+            // passing a receiver of the channel into each worker 
+            // as the thread pool creates the channel
+            workers.push(Worker::new(id, receiver));
         }
 
         // returned a ThreadPool instance containing the threads
         // ThreadPool { threads }
-
-        ThreadPool { workers }
+        // ThreadPool will create a channel and hold on to the sender
+        ThreadPool { workers, sender }
 
     }
     // pool.execute needs to be implemented in a way that it takes the closure 
@@ -65,6 +78,12 @@ impl ThreadPool {
 // between the ThreadPool and the threads to get this behavior
 
 // defining a Worker struct that holds an id and a JoinHandle<()>
+// the Worker struct is supposed to fetch the code to run from a queue held in the ThreadPool 
+// and send that code to its thread to run
+// we'll use channels to achieve this
+// we’ll use a channel to function as the queue of jobs
+// and execute will send a job from the ThreadPool to the Worker instances
+// which will send the job to its thread
 struct Worker {
     id: usize,
     thread: thread::JoinHandle<()>,
@@ -74,9 +93,15 @@ impl Worker {
     // defining a Worker::new function that takes an id number and returns a Worker instance
     // that holds the id and a thread spawned with an empty closure
 
-    fn new(id: usize) -> Worker {
+    fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
         // spawning thread with empty closure
-        let thread = thread::spawn(|| {});
+        // passing a receiver of the channel into each worker 
+        // as the thread pool creates the channel
+        let thread = thread::spawn(|| {
+            // we want to use the receiver in the thread that the workers spawn
+            // so we’ll reference the receiver parameter in the closure
+            receiver;
+        });
         
         // returning a Worker instance that holds the id and a thread spawned with an empty closure
         Worker { id, thread }
