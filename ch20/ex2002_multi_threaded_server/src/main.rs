@@ -39,10 +39,12 @@ fn main() {
         // spawning a new thread for each stream
         // thread::spawn(|| {
         // using the threadpool instead
+        // pool.execute has a similar interface as thread::spawn 
+        // it takes a closure the pool should run for each stream
         pool.execute(|| {
             // running the code in the closure in the new thread
             handle_connection(stream);
-        });
+         });
         
     }
 
