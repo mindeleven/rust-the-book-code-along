@@ -10,7 +10,7 @@ pub struct ThreadPool {
     // threads: Vec<thread::JoinHandle<()>>,
     // change ThreadPool to hold a vector of Worker instances
     workers: Vec<Worker>,
-    sender: mpsc::Sender<Job>,
+    sender: Option<mpsc::Sender<Job>>,
 }
 
 // Job struct that will hold the closures we want to send down the channel
@@ -62,7 +62,10 @@ impl ThreadPool {
         // returned a ThreadPool instance containing the threads
         // ThreadPool { threads }
         // ThreadPool will create a channel and hold on to the sender
-        ThreadPool { workers, sender }
+        ThreadPool { 
+            workers, 
+            sender: Some(sender)
+        }
 
     }
     // pool.execute needs to be implemented in a way that it takes the closure 
@@ -78,14 +81,22 @@ impl ThreadPool {
     {
         let job = Box::new(f);
 
-        self.sender.send(job).unwrap();
+        // self.sender.send(job).unwrap();
+
+        self.sender.as_ref().unwrap().send(job).unwrap();
+
     }
+    
 }
 
 // implementing Drop on the ThreadPool
 // when pool is dropped threads should all join to make sure they finish their work
 impl Drop for ThreadPool {
     fn drop(&mut self) {
+        // explicitly dropping the sender before waiting for the threads to finish
+        // dropping sender closes the channel, which indicates no more messages will be sent
+        drop(self.sender.take());
+
         // we looping through each of the thread pool workers
         // self is a mutable reference & we need to be able to mutate worker so we use &mut
         for worker in &mut self.workers {
