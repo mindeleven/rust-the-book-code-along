@@ -147,11 +147,31 @@ impl Worker {
             // calling the lock on the receiver to acquire the mutex
             // then calling unwrap to panic on any errors
             // if we get the lock we call recv to receive a Job from the channel
+            /* 
             let job = receiver.lock().unwrap().recv().unwrap();
 
             println!("Worker {id} got a job; executing.");
 
             job();
+            */
+
+            // changing the Worker loop to gracefully exit the loop in the case that
+            // that no more messages will be sent because dropping sender closes the channel 
+            // -> threads will finish when the ThreadPool drop implementation calls join on them
+            let message = receiver.lock().unwrap().recv();
+
+            match message {
+                Ok(job) => {
+                    println!("Worker {id} got a job; executing.");
+
+                    job();
+                },
+                Err(_) => {
+                    println!("Worker {id} disconnected; shutting down.");
+                    break;
+                },
+            }
+
         });
         
         // returning a Worker instance that holds the id and a thread spawned with an empty closure
