@@ -32,7 +32,10 @@ fn main() {
     // the incoming method on TcpListener returns an iterator 
     // with a sequence of streams of type TcpStream
     // echo "TEST" | netcat 127.0.0.1 7878
-    for stream in listener.incoming() {
+    // for stream in listener.incoming() {
+    
+    // accepting only two requests before gracefully shutting down the server
+    for stream in listener.incoming().take(2) {
         // single stream represents an open connection between the client and the server
         let stream = stream.unwrap();
         
