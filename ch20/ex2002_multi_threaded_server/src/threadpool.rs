@@ -82,6 +82,21 @@ impl ThreadPool {
     }
 }
 
+// implementing Drop on the ThreadPool
+// when pool is dropped threads should all join to make sure they finish their work
+impl Drop for ThreadPool {
+    fn drop(&mut self) {
+        // we looping through each of the thread pool workers
+        // self is a mutable reference & we need to be able to mutate worker so we use &mut
+        for worker in &mut self.workers {
+            // printing message saying that this particular worker is shutting down
+            println!("Shutting down worker {}", worker.id);
+
+            worker.thread.join().unwrap();
+        }
+    }
+}
+
 // we want to create the threads and have them wait for code that we’ll send later
 // we'll implement the Worker data structure as a new data structure 
 // between the ThreadPool and the threads to get this behavior
