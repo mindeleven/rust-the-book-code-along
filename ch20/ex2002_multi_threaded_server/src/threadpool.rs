@@ -91,8 +91,11 @@ impl Drop for ThreadPool {
         for worker in &mut self.workers {
             // printing message saying that this particular worker is shutting down
             println!("Shutting down worker {}", worker.id);
-
-            worker.thread.join().unwrap();
+            
+            if let Some(thread) = worker.thread.take() {
+                thread.join().unwrap();
+            }
+            
         }
     }
 }
@@ -110,7 +113,9 @@ impl Drop for ThreadPool {
 // which will send the job to its thread
 struct Worker {
     id: usize,
-    thread: thread::JoinHandle<()>,
+    // moving the thread out of the Worker instance that owns thread 
+    // by putting it in an Option<>
+    thread: Option<thread::JoinHandle<()>>,
 }
 
 impl Worker {
@@ -139,6 +144,9 @@ impl Worker {
         });
         
         // returning a Worker instance that holds the id and a thread spawned with an empty closure
-        Worker { id, thread }
+        Worker { 
+            id, 
+            thread: Some(thread) 
+        }
     }
 }
