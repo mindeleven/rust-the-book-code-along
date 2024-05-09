@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+#![allow(dead_code, unused_variables)]
 /// Pattern Syntax
 /// gathering all the syntax valid in patterns 
 /// plus examples for why and when to use each one
@@ -139,5 +139,19 @@ fn main() {
         _ => (),
     }
 
+    // Destructuring Structs and Tuples
+    // example of a complicated destructure 
+    let ((feet, inches), Point { x, y }) = ((3, 10), Point { x: 3, y: -10 });
+    
+    // Ignoring Values in a Pattern
+    // Ignoring an Entire Value with _
+    fn foo(_: i32, y: i32) {
+        println!("This code only uses the y parameter: {}", y);
+    }
+    foo(3, 4);
 
+    // Ignoring Parts of a Value with a Nested _
+    
+
+    
 }
