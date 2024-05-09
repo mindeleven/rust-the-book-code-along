@@ -115,4 +115,29 @@ fn main() {
         }
     }
 
+    // Destructuring Nested Structs and Enums
+    enum Color {
+        Rgb(i32, i32, i32),
+        Hsv(i32, i32, i32),
+    }
+    enum MessageWithColor {
+        Quit,
+        Move { x: i32, y: i32 },
+        Write(String),
+        ChangeColor(Color),
+    }
+
+    let msg = MessageWithColor::ChangeColor(Color::Hsv(0, 160, 255));
+
+    match msg {
+        MessageWithColor::ChangeColor(Color::Rgb(a, b, c)) => {
+            println!("Change color to red {a}, green {b}, and blue {c}")
+        },
+        MessageWithColor::ChangeColor(Color::Hsv(d, e, f)) => {
+            println!("Change color to hue {d}, saturation {e}, value {f}")
+        },
+        _ => (),
+    }
+
+
 }
