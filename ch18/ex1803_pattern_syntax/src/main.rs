@@ -172,6 +172,24 @@ fn main() {
         }
     }
 
-
+    // Ignoring an Unused Variable by Starting Its Name with _
+    // telling Rust not to warn you about the unused variable 
+    // by starting the name of the variable with an underscore
+    let _x = 5;
+    let _y = 10;
+    // the syntax _variable binds the value to the variable, whereas _ doesn’t bind at all
+    let s = Some(String::from("hello"));
+    if let Some(_s) = s {
+        // takes ownership, value partially moved
+        println!("found a string");
+    }
+    // println!("{:?}", s); // compiler error: value borrowed here after partial move
+    
+    // if we want to do something like this it can be done with just using the _:
+    let s = Some(String::from("Hello!"));
+    if let Some(_) = s {
+        println!("found a string");
+    }
+    println!("{:?}", s);
     
 }
