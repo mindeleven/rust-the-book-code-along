@@ -151,7 +151,27 @@ fn main() {
     foo(3, 4);
 
     // Ignoring Parts of a Value with a Nested _
-    
+    // we can use _ inside a pattern to ignore just part of a value
+    let mut setting_value = Some(5);
+    let new_setting_value = Some(10);
+    match (setting_value, new_setting_value) {
+        (Some(_), Some(_)) => {
+            println!("Can't overwrite an existing customized value");
+        },
+        _ => {
+            setting_value = new_setting_value;
+        }
+    }
+    println!("setting_value is {:?}", setting_value);
+
+    // another example
+    let numbers = (2, 4, 8, 16, 32);
+    match numbers {
+        (first, _, third, _, fifth) => {
+            println!("Some numbers: {first}, {third}, {fifth}")
+        }
+    }
+
 
     
 }
