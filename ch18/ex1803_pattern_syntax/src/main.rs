@@ -213,5 +213,35 @@ fn main() {
         // an attempt to use .. in an ambiguous way will fail: 
         // (.., second, ..) => println!("Some numbers: {}", second), // unreachable pattern
     }
+
+    // Extra Conditionals with Match Guards
+    // a match guard is an additional if condition specified after the pattern in a match arm
+    // that must also match for that arm to be chosen
+    // downside: compiler check for exhaustiveness when match guard expressions are involved
+    let num = Some(4);
+    match num {
+        Some(x) if x % 2 == 0 => println!("The number {} is even", x),
+        Some(x) => println!("The number {} is odd", x),
+        None => (),
+    }
+    
+    // match guard can be used to test against the value of the outer variable
+    // this solves the pattern-shadowing problem
+    let x1 = Some(5);
+    let y1 = 5;
+    match x1 {
+        Some(50) => println!("Got 50"),
+        Some(n) if n == y1 => println!("Matched, n = {n}"),
+        _ => println!("Default case, x = {:?}", x),
+    }
+    println!("at the end: x = {:?}, y = {y}", x);
+
+    // using the or operator | in a match guard to specify multiple patterns
+    let x = 4;
+    let y = true;
+    match x {
+        4 | 5 | 6 if y => println!("yes"), // if let y = true
+        _ => println!("no"),
+    }
     
 }
