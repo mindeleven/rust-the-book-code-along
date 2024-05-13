@@ -243,5 +243,27 @@ fn main() {
         4 | 5 | 6 if y => println!("yes"), // if let y = true
         _ => println!("no"),
     }
+
+    // @ Bindings
+    // the at operator @ lets us create a variable that holds a value at the same time 
+    // as we’re testing that value for a pattern match
+    enum MessageX {
+        Hello { id: i32 }
+    }
+    let msg = MessageX::Hello { id: 6 };
+    // Using @ Bindings in a match pattern
+    match msg {
+        MessageX::Hello { 
+            // by specifying id_variable @ before the range 3..=7
+            // we’re capturing whatever value matched the range 
+            // while also testing that the value matched the range pattern
+            id: id_variable @ 3..=7 
+        } => println!("Found an id in range: {}", id_variable),
+        MessageX::Hello { 
+            // the code here doesn’t have a variable that contains the actual value of the id
+            id: 10..=12 
+        } => println!("Found an id in another range"),
+        MessageX::Hello { id } => println!("Found some other id: {}", id),
+    }
     
 }
