@@ -184,12 +184,34 @@ fn main() {
         println!("found a string");
     }
     // println!("{:?}", s); // compiler error: value borrowed here after partial move
-    
+
     // if we want to do something like this it can be done with just using the _:
     let s = Some(String::from("Hello!"));
     if let Some(_) = s {
         println!("found a string");
     }
     println!("{:?}", s);
+
+    // Ignoring Remaining Parts of a Value with ..
+    // specific parts of a value with the .. syntax and ignoring the rest
+    struct PointX {
+        x: i32,
+        y: i32,
+        z: i32,
+    }
+    let origin = PointX { x: 0, y: 0, z: 0 };
+    match origin {
+        // ignoring all fields of a Point except for x by using ..
+        PointX { x, .. } => println!("x is {}", x),
+    }
+
+    let numbers = (2, 4, 8, 16, 32);
+    match numbers {
+        // matching only the first and last values in a tuple and ignoring all other values
+        (first, .., last) => println!("Some numbers: {first}, {last}"),
+        // using .. must be unambiguous
+        // an attempt to use .. in an ambiguous way will fail: 
+        // (.., second, ..) => println!("Some numbers: {}", second), // unreachable pattern
+    }
     
 }
