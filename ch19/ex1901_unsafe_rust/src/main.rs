@@ -30,5 +30,15 @@ fn main() {
         println!("r1 is: {}", *r1);
         println!("r2 is: {}", *r2);
     }
-    
+
+    // Calling an Unsafe Function or Method
+    // the second type of operation you can perform in an unsafe block is calling unsafe functions
+    unsafe {
+        dangerous();
+    }
+
+    println!("Gets this code printed?");
 }
+
+// unsafe function to be called in an unsafe block
+unsafe fn dangerous() {}
