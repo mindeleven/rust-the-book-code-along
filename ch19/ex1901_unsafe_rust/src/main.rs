@@ -1,3 +1,5 @@
+use core::slice;
+
 /// Unsafe Rust
 /// starting a new block with the unsafe keyword allows you to switch to unsafe Rust
 /// it gives you the ability to:
@@ -37,8 +39,55 @@ fn main() {
         dangerous();
     }
 
-    println!("Gets this code printed?");
+    // Creating a safe abstraction over unsafe code
+    // wrapping unsafe code in a safe function is a common abstraction
+    // example: the split_at_mut function from the standard library
+    let mut v = vec![1, 2, 3, 4, 5, 6];
+
+    let r = &mut v[..];
+    println!("{:?}", r);
+    // split_at_mut() divides one mutable slice into two at an index
+    // let (a, b) = r.split_at_mut(3);
+    let (a, b) = r.split_at_mut(3);
+    println!("a: {:?}, b: {:?}", a, b);
+    assert_eq!(a, &mut [1, 2, 3]);
+    assert_eq!(b, &mut [4, 5, 6]);
+    // using our own implementation of split_at_mut():
+    let mut v2 = vec![1, 2, 3, 4, 5, 6];
+    let (c, d) = my_split_at_mut(&mut v2, 3);
+    println!("c: {:?}, d: {:?}", a, b);
+    assert_eq!(c, &mut [1, 2, 3]);
+    assert_eq!(d, &mut [4, 5, 6]);
+
+    // println!("Gets this code printed?");
 }
 
 // unsafe function to be called in an unsafe block
 unsafe fn dangerous() {}
+
+// implementing our own version of split_at_mut() with using only safe Rust
+fn my_split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+    /* 
+    let len = values.len();
+
+    assert!(mid <= len);
+    // the borrow checker will complain because we're borrowing from the same slice twice
+    (&mut values[..mid], &mut values[mid..])
+    */
+
+    // doing it with unsafe,
+    // using an unsafe block, a raw pointer & some calls to unsafe functions
+    let len = values.len();
+    // as_mut_ptr() returns an unsafe mutable pointer to the slice's buffer.
+    let ptr = values.as_mut_ptr(); 
+
+    assert!(mid <= len);
+    
+    unsafe {
+        (
+            slice::from_raw_parts_mut(ptr, mid),
+            slice::from_raw_parts_mut(ptr.add(mid), len - mid)
+        )
+    }
+
+}
