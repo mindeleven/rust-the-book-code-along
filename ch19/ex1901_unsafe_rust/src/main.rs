@@ -9,6 +9,14 @@ use core::slice;
 /// -> implement an unsafe trait
 /// -> access fields of unions
 
+/// Accessing or modifying a mutable static variable
+/// in Rust global variables are called static variables
+/// static variables can only store references with the 'static lifetime
+/// values in a static variable have a fixed address in memory
+static HELLO_WORLD: &str = "Hello world";
+/// static variables can be mutable too
+static mut COUNTER: u32 = 0;
+
 fn main() {
     // Dereferencing a raw pointer
     // raw pointers that are similar to references and can be immutable or mutable 
@@ -60,6 +68,26 @@ fn main() {
     assert_eq!(d, &mut [4, 5, 6]);
 
     // println!("Gets this code printed?");
+
+    // Accessing or modifying a mutable static variable
+    // accessing an immutable static variable is safe
+    println!("{}", HELLO_WORLD); 
+
+    // accessing and modifying mutable static variables is unsafe
+    unsafe {
+        println!("{}", COUNTER); 
+    }
+    add_to_counter(100);
+    unsafe {
+        println!("{}", COUNTER); 
+    }
+    
+}
+
+fn add_to_counter(num: u32) {
+    unsafe {
+        COUNTER += num;
+    }
 }
 
 // unsafe function to be called in an unsafe block
