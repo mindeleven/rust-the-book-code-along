@@ -1,4 +1,4 @@
-# Code Along with The Rust Programming Language Chapter 19: Advanced Features
+# Code Along with The Rust Programming Language
 
 This repository the the sole purpose of learning the Rust programming language while coding along with the Rust book. It is a personal documantation of moving forward in my learning experience.
 
