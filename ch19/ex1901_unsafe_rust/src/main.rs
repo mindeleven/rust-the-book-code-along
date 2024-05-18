@@ -71,7 +71,7 @@ fn main() {
 
     // Accessing or modifying a mutable static variable
     // accessing an immutable static variable is safe
-    println!("{}", HELLO_WORLD); 
+    println!("{}", HELLO_WORLD);
 
     // accessing and modifying mutable static variables is unsafe
     unsafe {
@@ -81,7 +81,7 @@ fn main() {
     unsafe {
         println!("{}", COUNTER); 
     }
-    
+
 }
 
 fn add_to_counter(num: u32) {
