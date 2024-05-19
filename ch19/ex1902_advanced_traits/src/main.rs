@@ -26,6 +26,13 @@ struct Point {
 /// overloading the operations and corresponding traits listed in std::ops 
 /// by implementing the traits associated with the operator
 /// example: overloading the + operator to add two Point instances together
+
+/// the add trait has a default type parameters
+/// trait Add<Rhs=Self> {...} // Rhs=Self =>  default type parameter syntax
+/// if a concrete type doesn't get specified when we implement the Add trait, 
+/// the type of Rhs will default to Self
+
+/// implementing the Add trait for Point with using the default for Rhs
 impl Add for Point {
     type Output = Point;
 
@@ -36,6 +43,20 @@ impl Add for Point {
         }
     }
 }
+
+/// another example for overloading the add trait with setting the value of the Rhs type
+/// example: two structs, Millimeters and Meters, that are thin wrapping an existing type
+struct Millimeters(u32);
+struct Meters(u32);
+
+impl Add<Meters> for Millimeters {
+    type Output = Millimeters;
+
+    fn add(self, other: Meters) -> Millimeters {
+        Millimeters(self.0 + (other.0 * 1000))
+    }
+}
+
 
 fn main() {
     assert_eq!(
