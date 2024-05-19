@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 /// Advanced Traits
 /// Specifying Placeholder Types in Trait Definitions with Associated Types
 /// Associated types => connect a type placeholder with a trait 
@@ -63,6 +64,45 @@ fn main() {
         Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
         Point { x: 3, y: 3 }
     );
+    
+    // implementing different traits on one type that both have methods with the same name
+    let person = Human;
+    // if called like this the direct implementation wins
+    person.fly();
+    
+    // specifying which fly method we mean by using more explicit syntax
+    Pilot::fly(&person);
+    Wizard::fly(&person);
 
     println!("Nothing to see here, please move on");
+}
+
+/// Fully Qualified Syntax for Disambiguation: Calling Methods with the Same Name
+/// implementing different traits on one type that both have methods with the same name
+trait Pilot {
+fn fly(&self);
+}
+
+trait Wizard {
+    fn fly(&self);
+}
+
+struct Human;
+
+impl Pilot for Human {
+    fn fly(&self) {
+        println!("This is your captain speaking.");
+    }
+}
+
+impl Wizard for Human {
+    fn fly(&self) {
+        println!("Up!");
+    }
+}
+
+impl Human {
+    fn fly(&self) {
+        println!("*waving arms furiously*");
+    }
 }
