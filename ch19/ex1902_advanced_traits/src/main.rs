@@ -74,13 +74,38 @@ fn main() {
     Pilot::fly(&person);
     Wizard::fly(&person);
 
+    // now the same for associates functions that don't have a self parameter
+    // -> multiple types or traits that define non-method functions with the same function name
+    trait Animal {
+        fn baby_name() -> String;
+    }
+    
+    struct Dog;
+    
+    impl Dog {
+        fn baby_name() -> String {
+            String::from("Spot")
+        }
+    }
+    
+    impl Animal for Dog {
+        fn baby_name() -> String {
+            String::from("puppy")
+        }
+    }
+
+    // how to call the baby_name function from the Animal trait
+    // above method (Animal::baby_name()) can't be used because 'no self'
+    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+
+
     println!("Nothing to see here, please move on");
 }
 
 /// Fully Qualified Syntax for Disambiguation: Calling Methods with the Same Name
 /// implementing different traits on one type that both have methods with the same name
 trait Pilot {
-fn fly(&self);
+    fn fly(&self);
 }
 
 trait Wizard {
@@ -106,3 +131,4 @@ impl Human {
         println!("*waving arms furiously*");
     }
 }
+
