@@ -58,6 +58,36 @@ impl Add<Meters> for Millimeters {
     }
 }
 
+/// Using Supertraits to Require One Trait’s Functionality Within Another Trait
+/// trait definition that depends on another trait: 
+/// -> for a type to implement the first trait, 
+/// -> you want to require that type to also implement the second trait
+
+use std::fmt;
+
+/// Implementing the OutlinePrint trait that requires the functionality from Display
+/// -> specifying that OutlinePrint requires the Display trait
+/// The OutlinePrint trait as an example of a trait definition that depends on another trait
+trait OutlinePrint: fmt::Display {
+    fn outline_print(&self) {
+        let output = self.to_string();
+        let len = output.len();
+        println!("{}", "*".repeat(len + 4));
+        println!("*{}*", " ".repeat(len + 2));
+        println!("* {} *", output);
+        println!("*{}*", " ".repeat(len + 2));
+        println!("{}", "*".repeat(len + 4));
+    }
+}
+
+impl OutlinePrint for Point {}
+
+/// OutlinePrint requires that we implement Display on Point
+impl fmt::Display for Point {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
 
 fn main() {
     assert_eq!(
@@ -98,6 +128,9 @@ fn main() {
     // above method (Animal::baby_name()) can't be used because 'no self'
     println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
 
+    // calling the OutlinePrint trait to action
+    let print_the_point = Point { x: 1, y: 3 };
+    print_the_point.outline_print();
 
     println!("Nothing to see here, please move on");
 }
