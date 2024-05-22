@@ -1,3 +1,4 @@
+#![allow(dead_code, unused_variables)]
 /// Using the newtype pattern to implement external traits on external types
 use std::fmt;
 
@@ -29,12 +30,26 @@ fn main() {
     // main use case for type synonyms: reducing repetition
     // (= reducing typing when it comes to lengthy types)
     type Thunk = Box<dyn Fn() + Send + 'static>;
-    let _f: Thunk = Box::new(|| println!("hi"));
+    let f: Thunk = Box::new(|| println!("hi"));
     // as function parameter or return type:
-    fn _takes_long_type(f: Thunk) {
+    fn takes_long_type(f: Thunk) {
        unimplemented!()
     }
-    fn _returns_long_type() -> Thunk {
+    fn returns_long_type() -> Thunk {
         unimplemented!()
     }
+
+    // Type aliases for reducing repetition with the Result<T, E> type 
+    // std::io has shortcut Result type alias declaration:
+    type Result<T> = std::result::Result<T, std::io::Error>;
+    // it is a fully qualified alias that is a Result<T, E> with the E filled in as std::io::Error
+    // using it The Write trait function signatures ends up looking like this:
+    pub trait Write {
+        fn write(&mut self, buf: &[u8]) -> Result<usize>;
+        fn flush(&mut self) -> Result<()>;
+
+        fn write_all(&mut self, buf: &[u8]) -> Result<()>;
+        fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<()>;
+    }
+
 }
