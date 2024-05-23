@@ -1,6 +1,6 @@
 #![allow(dead_code, unused_variables)]
 /// Using the newtype pattern to implement external traits on external types
-use std::fmt;
+use std::{fmt, intrinsics::unreachable};
 
 /// the newtype pattern is a lightweight way to achieve encapsulation to hide implementation details
 /// kind of a workaround for implementing Display on Vec<T>:
@@ -50,6 +50,22 @@ fn main() {
 
         fn write_all(&mut self, buf: &[u8]) -> Result<()>;
         fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<()>;
+    }
+
+    // The Never type that never returns
+    // a special type named ! aka the empty type because it has no values
+    // functions that return never are called diverging functions
+    fn bar() -> ! { // the function bar returns never
+        unimplemented!()
+    }
+    // useful in match because continue has a ! value
+    let guess = "42 ";
+    // snipped from guessing game example, chapter 6
+    loop {
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue, // expressions of type ! can be coerced into any other type
+        };
     }
 
 }
