@@ -69,4 +69,26 @@ fn main() {
         break; // getting outta this place
     }
 
+    // Dynamically Sized Types and the Sized Trait
+    // the concept of dynamically sized types, sometimes referred to as DSTs or unsized types
+    // Rust provides the Sized trait to work with DSTs 
+    // it allows us to determine whether or not a type’s size is known at compile time
+    // Rust implicitly adds a bound on Sized to every generic function
+    // example: this is how we write the function:
+    fn generic<T>(t: T) {
+        unimplemented!()
+    }
+    // that's how it looks for Rust:
+    fn generic_rusty<T: Sized>(t: T) {
+        unimplemented!()
+    }
+    // by default generic functions will work only on types that have a known size at compile time
+    // you can use the following special syntax to relax this restriction:
+    fn generic_relaxed<T: ?Sized>(t: &T) { // trait bound on ?Sized means “T may or may not be Sized”
+        unimplemented!()
+    }
+
+
+
+
 }
