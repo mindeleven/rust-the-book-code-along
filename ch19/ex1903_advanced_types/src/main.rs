@@ -1,6 +1,6 @@
 #![allow(dead_code, unused_variables)]
 /// Using the newtype pattern to implement external traits on external types
-use std::{fmt, intrinsics::unreachable};
+use std::fmt;
 
 /// the newtype pattern is a lightweight way to achieve encapsulation to hide implementation details
 /// kind of a workaround for implementing Display on Vec<T>:
@@ -66,6 +66,7 @@ fn main() {
             Ok(num) => num,
             Err(_) => continue, // expressions of type ! can be coerced into any other type
         };
+        break; // getting outta this place
     }
 
 }
