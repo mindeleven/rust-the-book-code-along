@@ -29,4 +29,11 @@ fn main() {
         list_of_numbers_2.iter().map(ToString::to_string).collect();
         println!("The list of strings we got with a function pointer {:?}", list_of_strings_2);
 
+    // Returning Closures
+    fn _returns_closure() -> Box<dyn Fn(i32) -> i32> {
+        // Rust doesn’t know how much space it will need to store the closure
+        // so we wrap the returned closure into a Box
+        Box::new(|x| x + 1)
+    }
+    
 }
