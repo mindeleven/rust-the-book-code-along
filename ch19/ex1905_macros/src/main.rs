@@ -26,6 +26,11 @@ macro_rules! vec_cust {
     };
 }
 
+/// (2/2) Procedural Macros for Generating Code from Attributes
+/// procedural macros accept some code as an input, 
+/// operate on that code, 
+/// and produce some code as an output
+
 fn main() {
     // calling declarative Macro example
     let my_vec = vec_cust![21, 22, 34];
