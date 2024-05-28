@@ -15,10 +15,14 @@ use hello_macro_derive::HelloMacro;
 #[derive(HelloMacro)]
 struct Pancakes2;
 
+#[derive(HelloMacro)]
+struct TaoCat;
+
 fn main() {
     // first approach
     Pancakes::hello_macro();
     
     // 2nd approach
     Pancakes2::hello_macro();
+    TaoCat::hello_macro();
 }

@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 hello_macro = { path = "../hello_macro" }
-hello_macro_derive = { path = "../hello_macro_derive" }
+hello_macro_derive = { path = "../hello_macro/hello_macro_derive" }
